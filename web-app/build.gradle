@@ -1,0 +1,47 @@
+/*
+ * Copyright 2018 Google LLC
+ *  
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *  
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *  
+ */
+
+apply plugin: 'kotlin-platform-js'
+
+dependencies {
+    expectedBy project(":sudoku-engine")
+    compile "org.jetbrains.kotlin:kotlin-stdlib-js:$kotlin_version"
+    compile "org.jetbrains.kotlinx:kotlinx-html-js:0.6.8"
+    testCompile "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
+    testCompile "org.jetbrains.kotlin:kotlin-test-js:$kotlin_version"
+}
+
+//extracts the resulting JS and puts it in the /web folder with all required dependencies
+//then you can open static/index.html and see your web app
+task assembleWeb(type: Sync) {
+    configurations.compile.each { File file ->
+        from(zipTree(file.absolutePath), {
+            includeEmptyDirs = false
+            include { fileTreeElement ->
+                def path = fileTreeElement.path
+                path.endsWith(".js") && (path.startsWith("META-INF/resources/") ||
+                        !path.startsWith("META-INF/"))
+            }
+        })
+    }
+    from compileKotlin2Js.destinationDir
+    into "${projectDir}/web"
+
+    dependsOn classes
+}
+
+assemble.dependsOn assembleWeb
