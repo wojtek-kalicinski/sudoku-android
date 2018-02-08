@@ -39,8 +39,6 @@ fun main(args: Array<String>) {
             }
         }
     })
-
-
 }
 
 var solvedBoard: Board? = null
@@ -56,7 +54,6 @@ fun generate() {
         } else {
             ""
         }
-
     }
 }
 

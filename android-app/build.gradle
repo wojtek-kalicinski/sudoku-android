@@ -40,7 +40,16 @@ android {
         release {
             signingConfig signingConfigs.debug
             minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt')
+            proguardFiles getDefaultProguardFile('proguard-android.txt'),
+                    "proguard.pro"
+        }
+
+        releaseOptim {
+            signingConfig signingConfigs.debug
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
+                    "proguard.pro", "aggresive.pro"
+            matchingFallbacks = ['release']
         }
     }
 }
