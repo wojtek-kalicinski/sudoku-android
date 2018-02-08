@@ -1,0 +1,25 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "me.kalicinski.sudoku",
+    "sha256_cert_fingerprints":
+    ["D7:60:60:6F:ED:56:A3:73:8E:48:6D:0C:C7:6E:37:8B:31:F1:DA:99:BF:93:1D:5E:F6:E2:FC:64:4C:12:5F:51"]
+  }
+},
+{
+  "relation": ["delegate_permission/common.get_login_creds"],
+  "target": {
+    "namespace": "web",
+    "site": "https://sudokuplayground.firebaseapp.com"
+  }
+},
+{
+  "relation": ["delegate_permission/common.get_login_creds"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "me.kalicinski.sudoku",
+    "sha256_cert_fingerprints":
+    ["D7:60:60:6F:ED:56:A3:73:8E:48:6D:0C:C7:6E:37:8B:31:F1:DA:99:BF:93:1D:5E:F6:E2:FC:64:4C:12:5F:51"]
+  }
+}]
