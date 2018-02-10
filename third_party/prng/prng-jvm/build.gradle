@@ -15,12 +15,11 @@
  *  
  */
 
-include ':android-app', ':libsudoku-common', ':libsudoku-jvm', ':web-app', ':libsudoku-js'
-project(':libsudoku-common').projectDir = file("libsudoku/libsudoku-common")
-project(':libsudoku-jvm').projectDir = file("libsudoku/libsudoku-jvm")
-project(':libsudoku-js').projectDir = file("libsudoku/libsudoku-js")
+apply plugin: 'kotlin-platform-jvm'
 
-include ':prng-common', ':prng-js', ':prng-jvm'
-project(':prng-common').projectDir = file("third_party/prng/prng-common")
-project(':prng-jvm').projectDir = file("third_party/prng/prng-jvm")
-project(':prng-js').projectDir = file("third_party/prng/prng-js")
+dependencies {
+    expectedBy project(':prng-common')
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    testCompile "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
+    testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
+}
