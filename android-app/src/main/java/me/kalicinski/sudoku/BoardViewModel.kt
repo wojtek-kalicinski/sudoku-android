@@ -24,9 +24,10 @@ import android.arch.lifecycle.ViewModel
 import android.os.Handler
 import android.os.Message
 import me.kalicinski.sudoku.engine.SudokuBoard
+import javax.inject.Inject
 
 
-class BoardViewModel(val repository: BoardRepository) : ViewModel() {
+class BoardViewModel @Inject constructor(val repository: BoardRepository) : ViewModel() {
     private var solvedBoard: SudokuBoard? = null
     val board = MutableLiveData<SudokuBoard>()
     val busy = MutableLiveData<Boolean>()

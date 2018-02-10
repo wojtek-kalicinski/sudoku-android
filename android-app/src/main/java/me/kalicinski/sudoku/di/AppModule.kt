@@ -36,15 +36,5 @@ abstract class AppModule {
             return application.applicationContext
         }
 
-        @Provides
-        @JvmStatic
-        internal fun providesViewModelFactory(repository: BoardRepository): ViewModelProvider.Factory {
-            return object : ViewModelProvider.Factory {
-                override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                    @Suppress("UNCHECKED_CAST")
-                    return BoardViewModel(repository) as T
-                }
-            }
-        }
     }
 }
