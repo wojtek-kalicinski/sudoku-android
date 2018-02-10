@@ -17,9 +17,13 @@
 
 package me.kalicinski.sudoku.engine
 
-class IntBoard(initGrid: IntArray = IntArray(BOARD_SIZE)) : SudokuSolver.Board() {
+class IntBoard(initGrid: IntArray = IntArray(BOARD_SIZE)) : SudokuBoard() {
 
     val grid = initGrid.copyOf()
+
+    override fun clearValues(pos: Int) {
+        grid[pos] = 0
+    }
 
     override fun isCommitedValue(pos: Int): Boolean {
         if (ENABLE_ASSERTIONS) {
@@ -138,7 +142,7 @@ class IntBoard(initGrid: IntArray = IntArray(BOARD_SIZE)) : SudokuSolver.Board()
     private fun checkAssertions(pos: Int, value: Int) {
         when {
             pos < 0 -> throw IllegalArgumentException("pos is " + pos)
-            pos >= SudokuSolver.Board.BOARD_SIZE -> throw IllegalArgumentException("pos is " + pos)
+            pos >= SudokuBoard.BOARD_SIZE -> throw IllegalArgumentException("pos is " + pos)
             value <= 0 -> throw IllegalArgumentException("val is " + value)
             value > 9 -> throw IllegalArgumentException("val is " + value)
         }
@@ -155,8 +159,8 @@ class IntBoard(initGrid: IntArray = IntArray(BOARD_SIZE)) : SudokuSolver.Board()
         private val COMMITED_VALUE_BIT_FIELD = 9
         private val STARTING_VALUE_BIT_FIELD = 10
 
-        fun fromArray(values: IntArray): SudokuSolver.Board {
-            if (values.size != SudokuSolver.Board.BOARD_SIZE) {
+        fun fromArray(values: IntArray): SudokuBoard {
+            if (values.size != SudokuBoard.BOARD_SIZE) {
                 throw IllegalArgumentException("int[] values must be of length 81")
             }
             val board = IntBoard()

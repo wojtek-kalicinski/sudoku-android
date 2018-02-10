@@ -17,20 +17,18 @@
 
 package me.kalicinski.sudoku.engine
 
-import me.kalicinski.sudoku.engine.SudokuSolver.Board
-
-class SudokuSolver(private val solvers: Array<Board.(Int, Boolean) -> SolverResult>) {
+class SudokuSolver(private val solvers: Array<SudokuBoard.(Int, Boolean) -> SolverResult>) {
 
     fun solve(
-            board: Board,
+            board: SudokuBoard,
             maxSolutions: Int = 1,
             backtracks: Int = UNLIMITED_BACKTRACKING,
             progressListener: SolverListener? = null
-    ): ArrayList<Board> {
-        val solutions = ArrayList<Board>()
+    ): ArrayList<SudokuBoard> {
+        val solutions = ArrayList<SudokuBoard>()
         val boardFlipped = board.copy()
-        (0 until Board.BOARD_SIZE).filter { !boardFlipped.isCommitedValue(it) }.forEach {
-            for (number in Board.NUMBERS) {
+        (0 until SudokuBoard.BOARD_SIZE).filter { !boardFlipped.isCommitedValue(it) }.forEach {
+            for (number in SudokuBoard.NUMBERS) {
                 boardFlipped.addPossibleValue(it, number)
             }
         }
@@ -38,14 +36,14 @@ class SudokuSolver(private val solvers: Array<Board.(Int, Boolean) -> SolverResu
         solveInternal(boardFlipped, solutions, maxSolutions, backtracks, progressListener)
 
         for (board1 in solutions) {
-            (0 until Board.BOARD_SIZE).forEach { board1.setCommitedValue(it, true) }
+            (0 until SudokuBoard.BOARD_SIZE).forEach { board1.setCommitedValue(it, true) }
         }
         return solutions
     }
 
     private fun solveInternal(
-            board: Board,
-            solutions: ArrayList<Board>,
+            board: SudokuBoard,
+            solutions: ArrayList<SudokuBoard>,
             numOfSolutions: Int,
             backtracks: Int,
             progressListener: SolverListener?
@@ -55,7 +53,7 @@ class SudokuSolver(private val solvers: Array<Board.(Int, Boolean) -> SolverResu
         var unfilledCellFound = false
 
         var i = 0
-        while (i < Board.BOARD_SIZE) {
+        while (i < SudokuBoard.BOARD_SIZE) {
             if (!board.hasPossibleValue(i)) {
                 return
             }
@@ -101,7 +99,7 @@ class SudokuSolver(private val solvers: Array<Board.(Int, Boolean) -> SolverResu
                 unfilledCellFound = true
             }
 
-            if (i == Board.BOARD_SIZE - 1) {
+            if (i == SudokuBoard.BOARD_SIZE - 1) {
                 if (firstPass) {
                     if (!madeChanges) {
                         firstPass = false
@@ -120,165 +118,18 @@ class SudokuSolver(private val solvers: Array<Board.(Int, Boolean) -> SolverResu
         }
     }
 
-    abstract class Board {
-
-        open fun toArray(): IntArray {
-            val board = IntArray(BOARD_SIZE)
-            for (i in 0 until BOARD_SIZE) {
-                if (possibleValuesNum(i) > 1) {
-                    throw IllegalStateException("Cannot convert this board to int[], too "
-                            + "many possible values")
-                }
-                board[i] = getFirstPossibleValue(i)
-            }
-            return board
-        }
-
-        /**
-         * Returns true if the value in this cell is not a draft.
-         * @param pos cell index
-         * @return true if value is not a draft
-         */
-        abstract fun isCommitedValue(pos: Int): Boolean
-
-        abstract fun setCommitedValue(pos: Int, commited: Boolean)
-
-        /**
-         * Returns true if the value in this cell is part of the sudoku board and can't be changed
-         * @param pos cell index
-         * @return true if value is a starting value of the sudoku board
-         */
-        abstract fun isStartingValue(pos: Int): Boolean
-
-        abstract fun setStartingValue(pos: Int, starting: Boolean)
-
-        /**
-         * Checks if there are any numbers currently in this cell
-         * @param pos cell index
-         * @return true if the cell holds at least one value
-         */
-        abstract fun hasPossibleValue(pos: Int): Boolean
-
-        /**
-         * Checks how many numbers are currently in this cell
-         * @param pos cell index
-         * @return the number of currently held values
-         */
-        abstract fun possibleValuesNum(pos: Int): Int
-
-        /**
-         * Returns a list of current numbers in this cell
-         * @param pos cell index
-         * @return List containing all numbers in this cell
-         */
-        abstract fun possibleValues(pos: Int): List<Int>
-
-        /**
-         * Sets a single number in a cell, either as draft or not.
-         * This call removes any other numbers from the cell.
-         *
-         * @param pos cell index
-         * @param value number 1-9
-         * @param commited true if the number is not a draft
-         */
-        abstract fun setValue(pos: Int, value: Int, commited: Boolean)
-
-        /**
-         * Unsets a number in a cell if it was set.
-         * @param pos cell index
-         * @param value number 1-9
-         * @return true if the operation changed the board, false if it was no-op
-         */
-        abstract fun removePossibleValue(pos: Int, value: Int): Boolean
-
-        /**
-         * Sets a number in a cell if it was not set
-         * @param pos cell index
-         * @param value number 1-9
-         * @return true if the operation changed the board, false if it was no-op
-         */
-        abstract fun addPossibleValue(pos: Int, value: Int): Boolean
-
-        /**
-         * Checks if the given number is currently set
-         * @param pos cell index
-         * @param value number 1-9 to check
-         * @return true if the cell currently has the number set
-         */
-        abstract fun isValuePossible(pos: Int, value: Int): Boolean
-
-        /**
-         * Gets the first number that is set in this cell, if any
-         * @param pos cell index
-         * @return first number that is set, counting from 1-9
-         */
-        abstract fun getFirstPossibleValue(pos: Int): Int
-
-        /**
-         * Returns an deep copy of this board.
-         * @return copy of this board
-         */
-        abstract fun copy(): Board
-
-        companion object {
-            const val BOARD_SIZE = 9 * 9
-            val NUMBERS = (1..9).toList()
-
-            inline fun getIndex(x: Int, y: Int) = y * 9 + x
-
-            /**
-             * Get field column from field index
-             * @param i board cell index
-             * @return 0-based column number for the given cell
-             */
-            inline fun getColumn(i: Int) = i % 9
-
-            /**
-             * Get field row from field index
-             * @param i board cell index
-             * @return 0-based row number for the given cell
-             */
-            inline fun getRow(i: Int) = i / 9
-
-            /**
-             * Get index of the first cell in the column with the given cell
-             * @param i board cell index
-             * @return index of first cell in the same column
-             */
-            inline fun getColumnStart(i: Int) = getIndex(i % 9, 0)
-
-            /**
-             * Get index of the first cell in the row with the given cell
-             * @param i board cell index
-             * @return index of first cell in the same row
-             */
-            inline fun getRowStart(i: Int) = getIndex(0, i / 9)
-
-            /**
-             * Get index of the first cell in the same 3x3 square as the given cell
-             * @param i board cell index
-             * @return index of first cell in the same square
-             */
-            inline fun getSquareStart(i: Int): Int {
-                // has to be row: 0, 3, 6 and column: 0, 3, 6
-                return getIndex(getColumn(i) / 3 * 3, getRow(i) / 3 * 3)
-            }
-        }
-
-    }
-
     abstract class SolverListener {
-        abstract fun onBoardChanged(board: Board)
+        abstract fun onBoardChanged(board: SudokuBoard)
     }
 
     companion object {
         const val UNLIMITED_BACKTRACKING = -1
-        val defaultSolvers: Array<Board.(Int, Boolean) -> SolverResult> =
+        val defaultSolvers: Array<SudokuBoard.(Int, Boolean) -> SolverResult> =
                 arrayOf(::BasicConstraintSolver, ::OnlyOneSolver, ::SingleLineSolver)
 
-        fun generate(listener: SolverListener? = null): Pair<Board, Board>? {
+        fun generate(listener: SolverListener? = null): Pair<SudokuBoard, SudokuBoard>? {
             val solver = SudokuSolver(defaultSolvers)
-            val emptyBoard = IntBoard.fromArray(IntArray(Board.BOARD_SIZE))
+            val emptyBoard = IntBoard.fromArray(IntArray(SudokuBoard.BOARD_SIZE))
             val solutions = solver.solve(emptyBoard, 1, UNLIMITED_BACKTRACKING, listener)
             if (!solutions.isEmpty()) {
                 var startingBoard = solutions[0]
@@ -305,13 +156,13 @@ class SudokuSolver(private val solvers: Array<Board.(Int, Boolean) -> SolverResu
                         listener?.onBoardChanged(tempBoard)
                         startingBoard = tempBoard
                         removed++
-                        if (removed == Board.BOARD_SIZE - 18) {
+                        if (removed == SudokuBoard.BOARD_SIZE - 18) {
                             break
                         }
                     }
                 }
 
-                for (i in 0 until Board.BOARD_SIZE) {
+                for (i in 0 until SudokuBoard.BOARD_SIZE) {
                     if (startingBoard.possibleValuesNum(i) == 1) {
                         startingBoard.setCommitedValue(i, true)
                         startingBoard.setStartingValue(i, true)
@@ -348,14 +199,14 @@ class SudokuSolver(private val solvers: Array<Board.(Int, Boolean) -> SolverResu
  */
 
 fun BasicConstraintSolver(
-        board: Board,
+        board: SudokuBoard,
         position: Int,
         guess: Boolean
 ): SudokuSolver.SolverResult {
     var madeChanges = false
     if (!guess && board.possibleValuesNum(position) == 1) {
         val value = board.getFirstPossibleValue(position)
-        val rowStart = Board.getRowStart(position)
+        val rowStart = SudokuBoard.getRowStart(position)
         for (x in 0..8) {
             if (rowStart + x == position) {
                 continue
@@ -367,7 +218,7 @@ fun BasicConstraintSolver(
                 return SudokuSolver.SolverResult.DISCARD_BOARD
             }
         }
-        val colStart = Board.getColumnStart(position)
+        val colStart = SudokuBoard.getColumnStart(position)
         for (y in 0..8) {
             if (colStart + y * 9 == position) {
                 continue
@@ -379,7 +230,7 @@ fun BasicConstraintSolver(
                 return SudokuSolver.SolverResult.DISCARD_BOARD
             }
         }
-        val sqStart = Board.getSquareStart(position)
+        val sqStart = SudokuBoard.getSquareStart(position)
         for (x in 0..2) {
             for (y in 0..2) {
                 if (sqStart + x + y * 9 == position) {
@@ -402,7 +253,7 @@ fun BasicConstraintSolver(
 }
 
 fun OnlyOneSolver(
-        board: Board,
+        board: SudokuBoard,
         position: Int,
         guess: Boolean
 ): SudokuSolver.SolverResult {
@@ -413,7 +264,7 @@ fun OnlyOneSolver(
     var madeChanges = false
     for (candidate in board.possibleValues(position)) {
         var candidateExists = false
-        val rowStart = Board.getRowStart(position)
+        val rowStart = SudokuBoard.getRowStart(position)
         for (x in 0..8) {
             if (rowStart + x == position) {
                 continue
@@ -431,7 +282,7 @@ fun OnlyOneSolver(
             candidateExists = false
         }
 
-        val colStart = Board.getColumnStart(position)
+        val colStart = SudokuBoard.getColumnStart(position)
         for (y in 0..8) {
             if (colStart + y * 9 == position) {
                 continue
@@ -450,7 +301,7 @@ fun OnlyOneSolver(
             candidateExists = false
         }
 
-        val sqStart = Board.getSquareStart(position)
+        val sqStart = SudokuBoard.getSquareStart(position)
         for (x in 0..2) {
             for (y in 0..2) {
                 if (sqStart + x + y * 9 == position) {
@@ -477,7 +328,7 @@ fun OnlyOneSolver(
 }
 
 fun SingleLineSolver(
-        board: Board,
+        board: SudokuBoard,
         position: Int,
         guess: Boolean
 ): SudokuSolver.SolverResult {
@@ -485,14 +336,14 @@ fun SingleLineSolver(
         return SudokuSolver.SolverResult.NO_OP
     }
     var madeChanges = false
-    val startX = Board.getColumn(position)
-    val startY = Board.getRow(position)
+    val startX = SudokuBoard.getColumn(position)
+    val startY = SudokuBoard.getRow(position)
 
     for (candidate in board.possibleValues(position)) {
         var sameX = true
         var sameY = true
 
-        val sqStart = Board.getSquareStart(position)
+        val sqStart = SudokuBoard.getSquareStart(position)
         for (x in 0..2) {
             for (y in 0..2) {
                 val curPosition = sqStart + x + y * 9
@@ -500,30 +351,30 @@ fun SingleLineSolver(
                     continue
                 }
                 if (board.isValuePossible(curPosition, candidate)) {
-                    if (Board.getColumn(curPosition) != startX) {
+                    if (SudokuBoard.getColumn(curPosition) != startX) {
                         sameX = false
                     }
-                    if (Board.getRow(curPosition) != startY) {
+                    if (SudokuBoard.getRow(curPosition) != startY) {
                         sameY = false
                     }
                 }
             }
         }
         if (sameX) {
-            val rowStart = Board.getRowStart(position)
+            val rowStart = SudokuBoard.getRowStart(position)
             for (x in 0..8) {
                 val curPos = rowStart + x
-                if (Board.getRow(curPos) / 3 == Board.getRow(position) / 3) {
+                if (SudokuBoard.getRow(curPos) / 3 == SudokuBoard.getRow(position) / 3) {
                     continue
                 }
                 madeChanges = board.removePossibleValue(curPos, candidate)
             }
         }
         if (sameY) {
-            val colStart = Board.getColumnStart(position)
+            val colStart = SudokuBoard.getColumnStart(position)
             for (y in 0..8) {
                 val curPos = colStart + y * 9
-                if (Board.getColumn(curPos) / 3 == Board.getColumn(position) / 3) {
+                if (SudokuBoard.getColumn(curPos) / 3 == SudokuBoard.getColumn(position) / 3) {
                     continue
                 }
                 madeChanges = board.removePossibleValue(curPos, candidate)
@@ -541,7 +392,7 @@ fun SingleLineSolver(
 
 //currently broken and unused
 fun OnlyPairInUnit(
-        board: Board,
+        board: SudokuBoard,
         position: Int,
         guess: Boolean
 ): SudokuSolver.SolverResult {
@@ -549,18 +400,18 @@ fun OnlyPairInUnit(
         return SudokuSolver.SolverResult.NO_OP
     }
     var madeChanges = false
-    val startX = Board.getColumn(position)
-    val startY = Board.getRow(position)
-    val startSquare = Board.getSquareStart(position)
+    val startX = SudokuBoard.getColumn(position)
+    val startY = SudokuBoard.getRow(position)
+    val startSquare = SudokuBoard.getSquareStart(position)
 
     for (candidate in board.possibleValues(position)) {
         var onlyInRow = true
         var onlyInColumn = true
 
 
-        val rowStart = Board.getRowStart(position)
+        val rowStart = SudokuBoard.getRowStart(position)
         for (x in 0..8) {
-            if (Board.getSquareStart(rowStart + x) == startSquare) {
+            if (SudokuBoard.getSquareStart(rowStart + x) == startSquare) {
                 continue
             }
             if (board.isValuePossible(rowStart + x, candidate)) {
@@ -572,7 +423,7 @@ fun OnlyPairInUnit(
             for (x in 0..2) {
                 for (y in 0..2) {
                     val curPosition = startSquare + x + y * 9
-                    if (Board.getColumn(curPosition) == startX) {
+                    if (SudokuBoard.getColumn(curPosition) == startX) {
                         continue
                     }
                     madeChanges = board.removePossibleValue(curPosition, candidate)
@@ -581,9 +432,9 @@ fun OnlyPairInUnit(
         }
 
 
-        val colStart = Board.getColumnStart(position)
+        val colStart = SudokuBoard.getColumnStart(position)
         for (y in 0..8) {
-            if (Board.getSquareStart(colStart + y * 9) == startSquare) {
+            if (SudokuBoard.getSquareStart(colStart + y * 9) == startSquare) {
                 continue
             }
             if (board.isValuePossible(colStart + y * 9, candidate)) {
@@ -595,7 +446,7 @@ fun OnlyPairInUnit(
             for (x in 0..2) {
                 for (y in 0..2) {
                     val curPosition = startSquare + x + y * 9
-                    if (Board.getRow(curPosition) == startY) {
+                    if (SudokuBoard.getRow(curPosition) == startY) {
                         continue
                     }
                     madeChanges = board.removePossibleValue(curPosition, candidate)

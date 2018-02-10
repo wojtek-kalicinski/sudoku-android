@@ -30,8 +30,7 @@ import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import me.kalicinski.sudoku.engine.SudokuSolver
-import me.kalicinski.sudoku.engine.SudokuSolver.Board
+import me.kalicinski.sudoku.engine.SudokuBoard
 
 class BoardView @JvmOverloads constructor(
         context: Context,
@@ -39,7 +38,7 @@ class BoardView @JvmOverloads constructor(
         defStyleAttr: Int = 0,
         defStyleRes: Int = 0
 ) : ViewGroup(context, attrs, defStyleAttr, defStyleRes) {
-    private val cells = Array(SudokuSolver.Board.BOARD_SIZE) {
+    private val cells = Array(SudokuBoard.BOARD_SIZE) {
         CellView(context).apply {
             setTag(R.id.tag_cell_index, it)
         }
@@ -91,8 +90,8 @@ class BoardView @JvmOverloads constructor(
             val cellSize = size / 9f
 
             cells.forEachIndexed { i, cellView ->
-                val x = Board.getColumn(i)
-                val y = Board.getRow(i)
+                val x = SudokuBoard.getColumn(i)
+                val y = SudokuBoard.getRow(i)
                 cellView.layout(
                         (x * cellSize).toInt(),
                         (y * cellSize).toInt(),
@@ -139,7 +138,7 @@ class BoardView @JvmOverloads constructor(
         }
     }
 
-    fun setBoard(board: Board?) {
+    fun setBoard(board: SudokuBoard?) {
         cells.forEachIndexed { i, cellView ->
             cellView.apply {
                 setNumbersShown(board?.possibleValues(i) ?: emptySet())

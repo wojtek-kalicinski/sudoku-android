@@ -20,5 +20,4 @@
     <string name="generate">Generate</string>
     <string name="solve">Solve</string>
     <string name="check">Check</string>
-    <string name="pref_board">board</string>
 </resources>

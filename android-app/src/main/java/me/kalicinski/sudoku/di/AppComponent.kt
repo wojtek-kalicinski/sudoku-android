@@ -24,7 +24,11 @@ import me.kalicinski.sudoku.SudokuApplication
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = arrayOf(AppModule::class, AndroidInjectionModule::class, ActivityInjectorsModule::class))
+@Component(modules = arrayOf(
+        AppModule::class,
+        AndroidInjectionModule::class,
+        ActivityInjectorsModule::class
+))
 interface AppComponent : AndroidInjector<SudokuApplication> {
     @Component.Builder
     abstract class Builder : AndroidInjector.Builder<SudokuApplication>()

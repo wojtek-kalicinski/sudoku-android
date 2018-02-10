@@ -19,79 +19,39 @@ package me.kalicinski.sudoku
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
-import android.content.Context
-import android.content.SharedPreferences
-import android.preference.PreferenceManager
-import androidx.content.edit
-import com.google.gson.Gson
-import me.kalicinski.sudoku.engine.IntBoard
-import me.kalicinski.sudoku.engine.SudokuSolver
-import me.kalicinski.sudoku.engine.SudokuSolver.Board
-import org.json.JSONException
+import me.kalicinski.sudoku.datasource.GenerateBoardSource
+import me.kalicinski.sudoku.datasource.LocalBoardSource
+import me.kalicinski.sudoku.engine.SudokuBoard
 import java.util.concurrent.Executors
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class BoardRepository(context: Context) {
-
-    private val appContext: Context
-    private val gson = Gson()
-
-    init {
-        appContext = context.applicationContext
-    }
-
-    private val sharedPreferences: SharedPreferences by lazy {
-        PreferenceManager.getDefaultSharedPreferences(appContext)
-    }
-
+@Singleton
+class BoardRepository @Inject constructor(
+        val localSource: LocalBoardSource,
+        val generator: GenerateBoardSource
+) {
     private val executor = Executors.newSingleThreadExecutor()
 
-    fun getBoard(regen: Boolean): LiveData<Pair<Board, Board>> {
-        val liveData = MutableLiveData<Pair<Board, Board>>()
+    fun getBoard(regen: Boolean): LiveData<Pair<SudokuBoard, SudokuBoard>> {
+        val liveData = MutableLiveData<Pair<SudokuBoard, SudokuBoard>>()
         executor.execute {
-            //contains logic that reads the board from SharedPreferences
-            //or generates a fresh board in case no board can be loaded
-            var boards: Pair<Board, Board>? = null
-            if (!regen && sharedPreferences.contains(appContext.getString(R.string.pref_board))) {
-                try {
-
-                    val board = gson.fromJson(sharedPreferences.getString(
-                            appContext.getString(R.string.pref_board), ""),
-                            IntBoard::class.java)
-
-                    val startingBoard = board.copy()
-                    for (i in 0 until SudokuSolver.Board.BOARD_SIZE) {
-                        startingBoard.apply {
-                            if (!isStartingValue(i)) {
-                                setValue(i, 1, false)
-                                removePossibleValue(i, 1)
-                            }
-                        }
-                    }
-                    val solutions = SudokuSolver(SudokuSolver.defaultSolvers).solve(startingBoard)
-                    if (solutions.isNotEmpty()) {
-                        boards = Pair<Board, Board>(board, solutions[0])
-                    }
-                } catch (ignored: JSONException) {
-                }
+            var boards: Pair<SudokuBoard, SudokuBoard>? = null
+            if (!regen) {
+                boards = localSource.board as Pair<SudokuBoard, SudokuBoard>?
             }
 
             if (boards == null) {
-                boards = SudokuSolver.generate()
+                boards = generator.board as Pair<SudokuBoard, SudokuBoard>?
             }
             liveData.postValue(boards)
         }
         return liveData
     }
 
-    fun saveBoard(board: Board) {
+    fun saveBoard(board: SudokuBoard) {
         executor.execute {
-            //serializes the board to JSON and saves it to sharedpreferences
-            sharedPreferences.edit {
-                putString(
-                        appContext.getString(R.string.pref_board),
-                        gson.toJson(board)
-                )
-            }
+            localSource.board = Pair(board, null)
         }
     }
 

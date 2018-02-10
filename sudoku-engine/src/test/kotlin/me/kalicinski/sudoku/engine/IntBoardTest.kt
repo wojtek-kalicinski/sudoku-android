@@ -25,7 +25,7 @@ import kotlin.test.assertNotEquals
 import kotlin.test.assertTrue
 
 class IntBoardTest {
-    private lateinit var board: SudokuSolver.Board
+    private lateinit var board: SudokuBoard
 
     @BeforeTest
     fun setUp() {

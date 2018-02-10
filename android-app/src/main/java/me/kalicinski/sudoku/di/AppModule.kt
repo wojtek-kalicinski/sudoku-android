@@ -25,7 +25,6 @@ import dagger.Provides
 import me.kalicinski.sudoku.BoardRepository
 import me.kalicinski.sudoku.BoardViewModel
 import me.kalicinski.sudoku.SudokuApplication
-import javax.inject.Singleton
 
 @Module
 abstract class AppModule {
@@ -35,13 +34,6 @@ abstract class AppModule {
         @JvmStatic
         internal fun providesContext(application: SudokuApplication): Context {
             return application.applicationContext
-        }
-
-        @Provides
-        @Singleton
-        @JvmStatic
-        internal fun providesBoardRepository(context: Context): BoardRepository {
-            return BoardRepository(context)
         }
 
         @Provides

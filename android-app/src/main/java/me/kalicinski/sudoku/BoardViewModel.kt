@@ -23,13 +23,12 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModel
 import android.os.Handler
 import android.os.Message
-import me.kalicinski.sudoku.engine.SudokuSolver
-import me.kalicinski.sudoku.engine.SudokuSolver.Board
+import me.kalicinski.sudoku.engine.SudokuBoard
 
 
 class BoardViewModel(val repository: BoardRepository) : ViewModel() {
-    private var solvedBoard: Board? = null
-    val board = MutableLiveData<Board>()
+    private var solvedBoard: SudokuBoard? = null
+    val board = MutableLiveData<SudokuBoard>()
     val busy = MutableLiveData<Boolean>()
     val mistakes = MutableLiveData<BooleanArray>()
 
@@ -41,7 +40,7 @@ class BoardViewModel(val repository: BoardRepository) : ViewModel() {
     object : Handler() {
         override fun handleMessage(msg: Message) {
             if (msg.what == MSG_SAVE) {
-                repository.saveBoard(msg.obj as Board)
+                repository.saveBoard(msg.obj as SudokuBoard)
             } else {
                 super.handleMessage(msg)
             }
@@ -74,8 +73,8 @@ class BoardViewModel(val repository: BoardRepository) : ViewModel() {
     fun generateNewBoard(regen: Boolean) {
         busy.value = true
         val newBoards = repository.getBoard(regen)
-        newBoards.observeForever(object : Observer<Pair<Board, Board>> {
-            override fun onChanged(b: Pair<Board, Board>?) {
+        newBoards.observeForever(object : Observer<Pair<SudokuBoard, SudokuBoard>> {
+            override fun onChanged(b: Pair<SudokuBoard, SudokuBoard>?) {
                 b?.let {
                     board.value = it.first
                     solvedBoard = it.second
@@ -95,7 +94,7 @@ class BoardViewModel(val repository: BoardRepository) : ViewModel() {
         busy.value = true
         board.value?.let { currentBoard ->
             if (solvedBoard != null) {
-                val errors = BooleanArray(SudokuSolver.Board.BOARD_SIZE) {
+                val errors = BooleanArray(SudokuBoard.BOARD_SIZE) {
                     currentBoard.isCommitedValue(it)
                             && currentBoard.getFirstPossibleValue(it) != solvedBoard?.getFirstPossibleValue(it)
                 }

@@ -23,7 +23,7 @@ import kotlinx.html.table
 import kotlinx.html.td
 import kotlinx.html.tr
 import me.kalicinski.sudoku.engine.SudokuSolver
-import me.kalicinski.sudoku.engine.SudokuSolver.Board
+import me.kalicinski.sudoku.engine.SudokuBoard
 import kotlin.browser.document
 
 fun main(args: Array<String>) {
@@ -41,14 +41,14 @@ fun main(args: Array<String>) {
     })
 }
 
-var solvedBoard: Board? = null
+var solvedBoard: SudokuBoard? = null
 
 fun generate() {
     val boardPair = SudokuSolver.generate()!!
     solvedBoard = boardPair.second
     val board = boardPair.first
 
-    (0 until Board.BOARD_SIZE).forEach {
+    (0 until SudokuBoard.BOARD_SIZE).forEach {
         document.getElementById("cell${it}")!!.textContent = if (board.hasPossibleValue(it)){
             board.getFirstPossibleValue(it).toString()
         } else {
@@ -58,7 +58,7 @@ fun generate() {
 }
 
 fun solve() {
-    (0 until Board.BOARD_SIZE).forEach {
+    (0 until SudokuBoard.BOARD_SIZE).forEach {
         document.getElementById("cell${it}")!!.textContent =
                 solvedBoard?.getFirstPossibleValue(it).toString()
     }
