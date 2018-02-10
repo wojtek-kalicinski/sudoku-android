@@ -37,6 +37,21 @@ android {
     }
 
     buildTypes {
+        debugMini {
+            initWith debug
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'),
+                    "proguard.pro"
+            matchingFallbacks = ['debug']
+        }
+
+        debugMiniOptim {
+            initWith debugMini
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
+                    "proguard.pro", "aggresive.pro"
+            matchingFallbacks = ['debug']
+        }
+
         release {
             signingConfig signingConfigs.debug
             minifyEnabled true
@@ -45,8 +60,7 @@ android {
         }
 
         releaseOptim {
-            signingConfig signingConfigs.debug
-            minifyEnabled true
+            initWith release
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
                     "proguard.pro", "aggresive.pro"
             matchingFallbacks = ['release']
@@ -65,9 +79,10 @@ dependencies {
 
     implementation 'androidx.core:core-ktx:0.1'
 
+    implementation 'com.google.code.gson:gson:2.8.2'
+
     implementation 'com.google.dagger:dagger:2.14.1'
     implementation 'com.google.dagger:dagger-android-support:2.14.1'
-
     kapt 'com.google.dagger:dagger-compiler:2.14.1'
     kapt 'com.google.dagger:dagger-android-processor:2.14.1'
 

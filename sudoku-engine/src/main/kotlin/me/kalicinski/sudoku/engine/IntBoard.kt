@@ -36,18 +36,11 @@ class IntBoard(initGrid: IntArray = IntArray(BOARD_SIZE)) : SudokuSolver.Board()
             throw IllegalStateException("Can't commit when multiple values present")
         }
 
-        //TODO: this looks wrong
-//        if (isCommitedValue(pos) == commited) {
-//            return false
-//        } else {
         if (commited) {
             grid[pos] = grid[pos] or (1 shl COMMITED_VALUE_BIT_FIELD)
         } else {
             grid[pos] = grid[pos] and (1 shl COMMITED_VALUE_BIT_FIELD).inv()
         }
-//            return true
-//        }
-
     }
 
     override fun isStartingValue(pos: Int): Boolean {

@@ -23,16 +23,17 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import androidx.content.edit
+import com.google.gson.Gson
 import me.kalicinski.sudoku.engine.IntBoard
 import me.kalicinski.sudoku.engine.SudokuSolver
 import me.kalicinski.sudoku.engine.SudokuSolver.Board
-import org.json.JSONArray
 import org.json.JSONException
 import java.util.concurrent.Executors
 
 class BoardRepository(context: Context) {
 
     private val appContext: Context
+    private val gson = Gson()
 
     init {
         appContext = context.applicationContext
@@ -52,12 +53,10 @@ class BoardRepository(context: Context) {
             var boards: Pair<Board, Board>? = null
             if (!regen && sharedPreferences.contains(appContext.getString(R.string.pref_board))) {
                 try {
-                    val jsonArray =
-                            JSONArray(sharedPreferences.getString(
-                                    appContext.getString(R.string.pref_board), ""))
-                    val board = IntBoard(IntArray(SudokuSolver.Board.BOARD_SIZE) {
-                        jsonArray.getInt(it)
-                    })
+
+                    val board = gson.fromJson(sharedPreferences.getString(
+                            appContext.getString(R.string.pref_board), ""),
+                            IntBoard::class.java)
 
                     val startingBoard = board.copy()
                     for (i in 0 until SudokuSolver.Board.BOARD_SIZE) {
@@ -69,7 +68,7 @@ class BoardRepository(context: Context) {
                         }
                     }
                     val solutions = SudokuSolver(SudokuSolver.defaultSolvers).solve(startingBoard)
-                    if (solutions.isNotEmpty()){
+                    if (solutions.isNotEmpty()) {
                         boards = Pair<Board, Board>(board, solutions[0])
                     }
                 } catch (ignored: JSONException) {
@@ -87,15 +86,10 @@ class BoardRepository(context: Context) {
     fun saveBoard(board: Board) {
         executor.execute {
             //serializes the board to JSON and saves it to sharedpreferences
-            val intArray = board.toArray()
-            val jsonArray = JSONArray()
-            for (i in intArray) {
-                jsonArray.put(i)
-            }
             sharedPreferences.edit {
                 putString(
                         appContext.getString(R.string.pref_board),
-                        jsonArray.toString()
+                        gson.toJson(board)
                 )
             }
         }
