@@ -16,6 +16,7 @@
 
 package org.uncommons.maths.random
 
+import kotlin.math.abs
 import kotlin.math.max
 
 /**
@@ -118,10 +119,7 @@ public class MersenneTwisterRNG
             ((seed shr 8 * 7) and 0xFF).toByte()
     ))
 
-
-    fun getSeed(): ByteArray {
-        return seed.copyOf()
-    }
+    fun nextInt(bound: Int) = abs(nextInt()) % bound
 
     fun nextInt(): Int {
         var y: Int

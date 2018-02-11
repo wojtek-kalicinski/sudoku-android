@@ -24,6 +24,7 @@ import kotlinx.html.td
 import kotlinx.html.tr
 import me.kalicinski.sudoku.engine.SudokuSolver
 import me.kalicinski.sudoku.engine.SudokuBoard
+import org.uncommons.maths.random.MersenneTwisterRNG
 import kotlin.browser.document
 
 fun main(args: Array<String>) {

@@ -17,7 +17,12 @@
 
 package me.kalicinski.sudoku.engine
 
-class SudokuSolver(private val solvers: Array<SudokuBoard.(Int, Boolean) -> SolverResult>) {
+import org.uncommons.maths.random.MersenneTwisterRNG
+
+class SudokuSolver(
+        private val solvers: Array<SudokuBoard.(Int, Boolean) -> SolverResult>,
+        private val random: MersenneTwisterRNG? = null
+) {
 
     fun solve(
             board: SudokuBoard,
@@ -70,7 +75,11 @@ class SudokuSolver(private val solvers: Array<SudokuBoard.(Int, Boolean) -> Solv
 
             if (backtracks != 0 && !firstPass && board.possibleValuesNum(i) > 1) {
                 val candidates = board.possibleValues(i).toMutableList()
-                candidates.shuffle()
+                if (random != null) {
+                    candidates.shuffle(random)
+                } else {
+                    candidates.shuffle()
+                }
                 for (candidate in candidates) {
                     val newBoard = board.copy()
                     newBoard.setValue(i, candidate, true)
@@ -127,15 +136,22 @@ class SudokuSolver(private val solvers: Array<SudokuBoard.(Int, Boolean) -> Solv
         val defaultSolvers: Array<SudokuBoard.(Int, Boolean) -> SolverResult> =
                 arrayOf(::BasicConstraintSolver, ::OnlyOneSolver, ::SingleLineSolver)
 
-        fun generate(listener: SolverListener? = null): Pair<SudokuBoard, SudokuBoard>? {
-            val solver = SudokuSolver(defaultSolvers)
+        fun generate(
+                listener: SolverListener? = null,
+                random: MersenneTwisterRNG? = null
+        ): Pair<SudokuBoard, SudokuBoard>? {
+            val solver = SudokuSolver(defaultSolvers, random)
             val emptyBoard = IntBoard.fromArray(IntArray(SudokuBoard.BOARD_SIZE))
             val solutions = solver.solve(emptyBoard, 1, UNLIMITED_BACKTRACKING, listener)
             if (!solutions.isEmpty()) {
                 var startingBoard = solutions[0]
                 val solvedBoard = startingBoard.copy()
                 val removeList = 0.rangeTo(9 * 9 / 2 + 1).toMutableList()
-                removeList.shuffle()
+                if (random != null) {
+                    removeList.shuffle(random)
+                } else {
+                    removeList.shuffle()
+                }
                 var removed = 0
 
                 while (!removeList.isEmpty()) {

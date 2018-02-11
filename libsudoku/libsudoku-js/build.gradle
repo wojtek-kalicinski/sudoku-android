@@ -19,5 +19,6 @@ apply plugin: 'kotlin-platform-js'
 
 dependencies {
     expectedBy project(':libsudoku-common')
+    compile project(':prng-js')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-js:$kotlin_version"
 }
