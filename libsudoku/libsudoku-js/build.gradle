@@ -15,11 +15,9 @@
  *  
  */
 
-apply plugin: 'kotlin-platform-jvm'
+apply plugin: 'kotlin-platform-js'
 
 dependencies {
-    expectedBy project(":sudoku-engine")
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    testCompile "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
-    testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
+    expectedBy project(':libsudoku-common')
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-js:$kotlin_version"
 }

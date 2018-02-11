@@ -16,7 +16,6 @@
  */
 package me.kalicinski.sudoku
 
-import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
 import android.os.Bundle

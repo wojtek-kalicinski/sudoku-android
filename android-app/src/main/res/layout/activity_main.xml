@@ -50,7 +50,7 @@
 
         <Button
             android:onClick="@{() -> boardvm.generateNewBoard(true)}"
-            android:enabled="@{!boardvm.busy}"
+            android:enabled="@{!safeUnbox(boardvm.busy)}"
             android:id="@+id/generateButton"
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="wrap_content"
@@ -64,7 +64,7 @@
 
         <Button
             android:onClick="@{() -> boardvm.solveBoard()}"
-            android:enabled="@{!boardvm.busy}"
+            android:enabled="@{!safeUnbox(boardvm.busy)}"
             android:id="@+id/solveButton"
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="wrap_content"
@@ -77,7 +77,7 @@
 
         <Button
             android:onClick="@{() -> boardvm.checkBoard()}"
-            android:enabled="@{!boardvm.busy}"
+            android:enabled="@{!safeUnbox(boardvm.busy)}"
             android:id="@+id/checkButton"
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="wrap_content"

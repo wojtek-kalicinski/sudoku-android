@@ -110,6 +110,7 @@ abstract class SudokuBoard {
         const val BOARD_SIZE = 9 * 9
         val NUMBERS = (1..9).toList()
 
+        @Suppress("NOTHING_TO_INLINE")
         inline fun getIndex(x: Int, y: Int) = y * 9 + x
 
         /**
@@ -117,6 +118,7 @@ abstract class SudokuBoard {
          * @param i board cell index
          * @return 0-based column number for the given cell
          */
+        @Suppress("NOTHING_TO_INLINE")
         inline fun getColumn(i: Int) = i % 9
 
         /**
@@ -124,6 +126,7 @@ abstract class SudokuBoard {
          * @param i board cell index
          * @return 0-based row number for the given cell
          */
+        @Suppress("NOTHING_TO_INLINE")
         inline fun getRow(i: Int) = i / 9
 
         /**
@@ -131,6 +134,7 @@ abstract class SudokuBoard {
          * @param i board cell index
          * @return index of first cell in the same column
          */
+        @Suppress("NOTHING_TO_INLINE")
         inline fun getColumnStart(i: Int) = getIndex(i % 9, 0)
 
         /**
@@ -138,6 +142,7 @@ abstract class SudokuBoard {
          * @param i board cell index
          * @return index of first cell in the same row
          */
+        @Suppress("NOTHING_TO_INLINE")
         inline fun getRowStart(i: Int) = getIndex(0, i / 9)
 
         /**
@@ -145,6 +150,7 @@ abstract class SudokuBoard {
          * @param i board cell index
          * @return index of first cell in the same square
          */
+        @Suppress("NOTHING_TO_INLINE")
         inline fun getSquareStart(i: Int): Int {
             // has to be row: 0, 3, 6 and column: 0, 3, 6
             return getIndex(getColumn(i) / 3 * 3, getRow(i) / 3 * 3)

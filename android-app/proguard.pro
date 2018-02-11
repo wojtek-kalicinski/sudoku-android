@@ -1,5 +1,5 @@
 -dontwarn com.google.errorprone.annotations.**
 
--keep class me.kalicinski.sudoku.engine.IntBoard {
+-keep class IntBoard {
     int[] grid;
 }

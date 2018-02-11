@@ -38,10 +38,12 @@ class BoardRepository @Inject constructor(
         executor.execute {
             var boards: Pair<SudokuBoard, SudokuBoard>? = null
             if (!regen) {
+                @Suppress("UNCHECKED_CAST")
                 boards = localSource.board as Pair<SudokuBoard, SudokuBoard>?
             }
 
             if (boards == null) {
+                @Suppress("UNCHECKED_CAST")
                 boards = generator.board as Pair<SudokuBoard, SudokuBoard>?
             }
             liveData.postValue(boards)
