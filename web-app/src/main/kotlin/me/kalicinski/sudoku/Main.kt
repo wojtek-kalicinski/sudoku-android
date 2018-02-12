@@ -26,6 +26,7 @@ import me.kalicinski.sudoku.engine.SudokuSolver
 import me.kalicinski.sudoku.engine.SudokuBoard
 import org.uncommons.maths.random.MersenneTwisterRNG
 import kotlin.browser.document
+import kotlin.browser.window
 
 fun main(args: Array<String>) {
     var i = 0;
@@ -45,7 +46,12 @@ fun main(args: Array<String>) {
 var solvedBoard: SudokuBoard? = null
 
 fun generate() {
-    val boardPair = SudokuSolver.generate()!!
+    val seed = window.location.pathname.substring(
+            window.location.pathname.lastIndexOf('/') + 1
+    ).toLongOrNull()
+    val boardPair = seed?.let {
+        SudokuSolver.generate(random = MersenneTwisterRNG(it))!!
+    } ?: SudokuSolver.generate()!!
     solvedBoard = boardPair.second
     val board = boardPair.first
 
