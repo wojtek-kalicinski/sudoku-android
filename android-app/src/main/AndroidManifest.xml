@@ -17,7 +17,7 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="me.kalicinski.sudoku">
+    package="me.kalicinski.sudoku.basefeature">
 
     <application
         android:name="me.kalicinski.sudoku.SudokuApplication"

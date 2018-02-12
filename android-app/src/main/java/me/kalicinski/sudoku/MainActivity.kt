@@ -22,7 +22,8 @@ import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import dagger.android.AndroidInjection
-import me.kalicinski.sudoku.databinding.ActivityMainBinding
+import me.kalicinski.sudoku.basefeature.R
+import me.kalicinski.sudoku.basefeature.databinding.ActivityMainBinding
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
