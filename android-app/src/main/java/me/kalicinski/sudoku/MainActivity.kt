@@ -17,6 +17,7 @@
 package me.kalicinski.sudoku
 
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -33,11 +34,26 @@ class MainActivity : AppCompatActivity() {
         AndroidInjection.inject(this);
         super.onCreate(savedInstanceState)
         boardViewModel = ViewModelProviders.of(this, viewModelFactory).get(BoardViewModel::class.java)
-        boardViewModel.initIfEmpty()
+        val seed = intent?.data?.lastPathSegment?.toLongOrNull()
+        intent = null
+        if (seed == null) {
+            boardViewModel.initIfEmpty()
+        } else {
+            boardViewModel.generateNewBoard(true, seed)
+        }
 
         with(DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)) {
             setLifecycleOwner(this@MainActivity)
             boardvm = boardViewModel
+        }
+    }
+
+    override fun onNewIntent(newIntent: Intent?) {
+        super.onNewIntent(newIntent)
+        val seed = newIntent?.data?.lastPathSegment?.toLongOrNull()
+        intent = null
+        if (seed != null) {
+            boardViewModel.generateNewBoard(true, seed)
         }
     }
 

@@ -22,6 +22,7 @@ import android.arch.lifecycle.MutableLiveData
 import me.kalicinski.sudoku.datasource.GenerateBoardSource
 import me.kalicinski.sudoku.datasource.LocalBoardSource
 import me.kalicinski.sudoku.engine.SudokuBoard
+import org.uncommons.maths.random.MersenneTwisterRNG
 import java.util.concurrent.Executors
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -33,7 +34,7 @@ class BoardRepository @Inject constructor(
 ) {
     private val executor = Executors.newSingleThreadExecutor()
 
-    fun getBoard(regen: Boolean): LiveData<Pair<SudokuBoard, SudokuBoard>> {
+    fun getBoard(regen: Boolean, seed: Long): LiveData<Pair<SudokuBoard, SudokuBoard>> {
         val liveData = MutableLiveData<Pair<SudokuBoard, SudokuBoard>>()
         executor.execute {
             var boards: Pair<SudokuBoard, SudokuBoard>? = null
@@ -43,8 +44,7 @@ class BoardRepository @Inject constructor(
             }
 
             if (boards == null) {
-                @Suppress("UNCHECKED_CAST")
-                boards = generator.board as Pair<SudokuBoard, SudokuBoard>?
+                boards = generator.generateBoard(MersenneTwisterRNG(seed))
             }
             liveData.postValue(boards)
         }

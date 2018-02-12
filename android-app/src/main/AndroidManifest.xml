@@ -16,6 +16,7 @@
   -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="me.kalicinski.sudoku">
 
     <application
@@ -28,13 +29,16 @@
         <meta-data
             android:name="asset_statements"
             android:resource="@string/asset_statements" />
-        <activity android:name="me.kalicinski.sudoku.MainActivity">
+        <activity
+            android:name="me.kalicinski.sudoku.MainActivity"
+            android:launchMode="singleInstance">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <intent-filter android:autoVerify="true">
+            <intent-filter android:autoVerify="true"
+                tools:targetApi="m">
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
@@ -53,6 +57,28 @@
                 <data
                     android:scheme="http"
                     android:host="sudokuplayground.firebaseapp.com" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:scheme="https"
+                    android:host="sudokuplayground.firebaseapp.com"
+                    android:pathPrefix="/sudoku/" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:scheme="http"
+                    android:host="sudokuplayground.firebaseapp.com"
+                    android:pathPrefix="/sudoku/" />
             </intent-filter>
         </activity>
     </application>

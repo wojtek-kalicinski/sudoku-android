@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 private const val PREF_BOARD = "PREF_BOARD"
 
-class LocalBoardSource @Inject constructor(context: Context) : SudokuBoardSource {
+class LocalBoardSource @Inject constructor(context: Context) {
 
     private val appContext: Context = context.applicationContext
     private val gson = Gson()
@@ -21,7 +21,7 @@ class LocalBoardSource @Inject constructor(context: Context) : SudokuBoardSource
         PreferenceManager.getDefaultSharedPreferences(appContext)
     }
 
-    override var board: Pair<SudokuBoard, SudokuBoard?>?
+    var board: Pair<SudokuBoard, SudokuBoard?>?
         get() {
             return sharedPreferences.getString(PREF_BOARD,null)?.let {
                 val loadedBoard = gson.fromJson(it, IntBoard::class.java)

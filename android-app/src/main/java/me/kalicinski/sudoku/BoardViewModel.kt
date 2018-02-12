@@ -71,9 +71,10 @@ class BoardViewModel @Inject constructor(val repository: BoardRepository) : View
         }
     }
 
-    fun generateNewBoard(regen: Boolean) {
+    @JvmOverloads
+    fun generateNewBoard(regen: Boolean, seed: Long = System.currentTimeMillis()) {
         busy.value = true
-        val newBoards = repository.getBoard(regen)
+        val newBoards = repository.getBoard(regen, seed)
         newBoards.observeForever(object : Observer<Pair<SudokuBoard, SudokuBoard>> {
             override fun onChanged(b: Pair<SudokuBoard, SudokuBoard>?) {
                 b?.let {
