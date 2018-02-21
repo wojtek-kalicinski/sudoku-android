@@ -21,6 +21,8 @@ import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.Menu
+import android.view.MenuItem
 import dagger.android.AndroidInjection
 import me.kalicinski.sudoku.basefeature.R
 import me.kalicinski.sudoku.basefeature.databinding.ActivityMainBinding
@@ -46,7 +48,9 @@ class MainActivity : AppCompatActivity() {
         with(DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)) {
             setLifecycleOwner(this@MainActivity)
             boardvm = boardViewModel
+            setSupportActionBar(toolbar)
         }
+        supportActionBar?.setDisplayShowTitleEnabled(false)
     }
 
     override fun onNewIntent(newIntent: Intent?) {
@@ -61,5 +65,29 @@ class MainActivity : AppCompatActivity() {
     override fun onStop() {
         super.onStop()
         boardViewModel.saveNow()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        super.onCreateOptionsMenu(menu)
+        menuInflater.inflate(R.menu.main, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId){
+            R.id.share -> {
+                with(Intent()) {
+                    setAction(Intent.ACTION_SEND)
+                    putExtra(
+                            Intent.EXTRA_TEXT,
+                            "https://sudokuplayground.firebaseapp.com/sudoku/${boardViewModel.seed}"
+                    );
+                    setType("text/plain")
+                    startActivity(Intent.createChooser(this, getString(R.string.send_to)));
+                }
+                return true
+            }
+            else -> return false
+        }
     }
 }

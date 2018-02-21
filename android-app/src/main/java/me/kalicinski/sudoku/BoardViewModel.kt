@@ -30,6 +30,7 @@ import javax.inject.Inject
 class BoardViewModel @Inject constructor(val repository: BoardRepository) : ViewModel() {
     private var solvedBoard: SudokuBoard? = null
     val board = MutableLiveData<SudokuBoard>()
+    var seed = 0L
     val busy = MutableLiveData<Boolean>()
     val mistakes = MutableLiveData<BooleanArray>()
 
@@ -80,6 +81,7 @@ class BoardViewModel @Inject constructor(val repository: BoardRepository) : View
                 b?.let {
                     board.value = it.first
                     solvedBoard = it.second
+                    this@BoardViewModel.seed = seed
                 }
                 mistakes.value = null
                 busy.value = false

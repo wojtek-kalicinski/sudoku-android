@@ -21,4 +21,6 @@
     <string name="solve">Solve</string>
     <string name="check">Check</string>
     <string name="asset_statements" translatable="false">[{ \"include\": \"https://sudokuplayground.firebaseapp.com/.well-known/assetlinks.json\" }]</string>
+    <string name="share_board">Share board</string>
+    <string name="send_to">Send to</string>
 </resources>
