@@ -16,14 +16,29 @@ the ones implemented are _good enough_ for this sample.
 Some tech you can find inside:
 
  * Entirely written in [Kotlin](https://kotlinlang.org/)
- * The sudoku generator/solver is a pure kotlin common module, included from the Android
- and JavaScript modules
+ * The sudoku generator/solver is a pure Kotlin common module, included from the Android
+   and JavaScript frontends
  * Uses [Architecture Components](https://developer.android.com/topic/libraries/architecture/):
  ViewModels and LiveData
  * Uses [Data Binding](https://developer.android.com/topic/libraries/data-binding/index.html) to
- connect views to viewmodels
+ connect views to ViewModels (and observes LiveData!)
  * Uses [dagger-android](https://google.github.io/dagger/android.html) for dependency injection
-
+ * Uses [Android App Links](https://developer.android.com/training/app-links/index.html) to open 
+ deep links directly into the app, and also provides an 
+ [Instant App](https://developer.android.com/topic/instant-apps/index.html) 
+ version from the same project
+ 
+ To showcase the power of Kotlin multiplatform, some additional considerations were made:
+ * Sudoku boards are generated using a deterministic algorithm shared between frontends, i.e.
+ given a pseudo-random number generator (PRNG) initialized with the same seed, 
+ you will always get the same board
+ * The project contains a seeded PRNG written in Kotlin common (since Kotlin doesn't provide a 
+ built-in PRNG for Kotlin/JS in the standard library)
+ * Android app supports sharing and opening deep links containing a seed number 
+ used to initialize the board (e.g. https://sudokuplayground.firebaseapp.com/sudoku/1234)
+ * The website counterpart to the Android app is hosted under the same URLs and will show the 
+ same board when opened in a web browser, thanks to the shared, deterministic algorithm
+ 
 ## Development setup
 
 You require the latest Android Studio 3.1 (or newer) to be able to build the app.
