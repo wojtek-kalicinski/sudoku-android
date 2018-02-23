@@ -23,10 +23,13 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
+import com.google.android.instantapps.InstantApps
 import dagger.android.AndroidInjection
 import me.kalicinski.sudoku.basefeature.R
 import me.kalicinski.sudoku.basefeature.databinding.ActivityMainBinding
 import javax.inject.Inject
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -36,9 +39,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this);
         super.onCreate(savedInstanceState)
-        boardViewModel = ViewModelProviders.of(this, viewModelFactory).get(BoardViewModel::class.java)
+
         val seed = intent?.data?.lastPathSegment?.toLongOrNull()
         intent = null
+
+        boardViewModel = ViewModelProviders.of(this, viewModelFactory).get(BoardViewModel::class.java)
         if (seed == null) {
             boardViewModel.initIfEmpty()
         } else {
@@ -70,6 +75,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         super.onCreateOptionsMenu(menu)
         menuInflater.inflate(R.menu.main, menu)
+        if (InstantApps.isInstantApp(this)){
+            menuInflater.inflate(R.menu.instant, menu)
+        }
         return true
     }
 
@@ -87,7 +95,27 @@ class MainActivity : AppCompatActivity() {
                 }
                 return true
             }
+            R.id.get_app -> {
+                InstantApps.showInstallPrompt(
+                        this,
+                        Intent().apply {
+                            component = this@MainActivity.componentName
+                        },
+                        REQUEST_INSTALL,
+                        REFERRER
+                )
+                return true
+            }
+            R.id.oss_info -> {
+                startActivity(Intent(this, OssLicensesMenuActivity::class.java))
+                return true
+            }
             else -> return false
         }
+    }
+
+    companion object {
+        private val REFERRER = "Instant App"
+        private val REQUEST_INSTALL = 1
     }
 }

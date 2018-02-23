@@ -17,7 +17,9 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="me.kalicinski.sudoku.basefeature">
+    package="me.kalicinski.sudoku.basefeature"
+    android:targetSandboxVersion="2"
+    tools:targetApi="o">
 
     <application
         android:name="me.kalicinski.sudoku.SudokuApplication"
@@ -69,6 +71,12 @@
             </intent-filter>
 
         </activity>
+        <activity android:name="com.google.android.gms.oss.licenses.OssLicensesActivity"
+            android:theme="@style/Theme.AppCompat.Light"
+            />
+        <activity android:name="com.google.android.gms.oss.licenses.OssLicensesMenuActivity"
+            android:theme="@style/Theme.AppCompat.Light"
+            />
     </application>
 
 </manifest>

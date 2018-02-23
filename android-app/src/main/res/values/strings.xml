@@ -23,4 +23,6 @@
     <string name="asset_statements" translatable="false">[{ \"include\": \"https://sudokuplayground.firebaseapp.com/.well-known/assetlinks.json\" }]</string>
     <string name="share_board">Share board</string>
     <string name="send_to">Send to</string>
+    <string name="install_app">Install app</string>
+    <string name="install">Install</string>
 </resources>

@@ -17,4 +17,6 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="me.kalicinski.sudoku"/>
+    package="me.kalicinski.sudoku"
+    android:targetSandboxVersion="2"
+    tools:targetApi="o" />

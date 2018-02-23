@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/get_app"
+        android:icon="@drawable/ic_get_app_black_24dp"
+        android:title="@string/install_app"
+        android:titleCondensed="@string/install"
+        app:showAsAction="ifRoom" />
+</menu>

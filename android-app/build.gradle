@@ -16,6 +16,7 @@
  */
 
 apply plugin: 'com.android.feature'
+//apply plugin: 'com.google.gms.oss.licenses.plugin'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
@@ -94,10 +95,13 @@ dependencies {
     api 'com.android.support.constraint:constraint-layout:1.0.2'
     api 'com.android.support:support-annotations:27.0.2'
     api 'com.android.support:appcompat-v7:27.0.2'
+    implementation 'com.google.android.instantapps:instantapps:1.1.0'
 
     api "android.arch.lifecycle:extensions:1.1.0"
 
     implementation 'androidx.core:core-ktx:0.1'
+
+    implementation 'com.google.android.gms:play-services-oss-licenses:11.8.0'
 
     implementation 'com.google.code.gson:gson:2.8.2'
 

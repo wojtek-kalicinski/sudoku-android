@@ -8,4 +8,9 @@
         android:title="@string/share_board"
         android:titleCondensed="Share"
         app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/oss_info"
+        android:title="Open-source"
+        app:showAsAction="never" />
+
 </menu>
