@@ -24,13 +24,13 @@ import android.arch.lifecycle.ViewModel
 import android.os.Handler
 import android.os.Message
 import me.kalicinski.sudoku.engine.SudokuBoard
+import me.kalicinski.sudoku.engine.SudokuGame
 import javax.inject.Inject
 
 
 class BoardViewModel @Inject constructor(val repository: BoardRepository) : ViewModel() {
-    private var solvedBoard: SudokuBoard? = null
+    var game: SudokuGame? = null
     val board = MutableLiveData<SudokuBoard>()
-    var seed = 0L
     val busy = MutableLiveData<Boolean>()
     val mistakes = MutableLiveData<BooleanArray>()
 
@@ -42,7 +42,7 @@ class BoardViewModel @Inject constructor(val repository: BoardRepository) : View
     object : Handler() {
         override fun handleMessage(msg: Message) {
             if (msg.what == MSG_SAVE) {
-                repository.saveBoard(msg.obj as SudokuBoard)
+                repository.saveBoard(msg.obj as SudokuGame)
             } else {
                 super.handleMessage(msg)
             }
@@ -52,8 +52,9 @@ class BoardViewModel @Inject constructor(val repository: BoardRepository) : View
     init {
         board.observeForever {
             if (it != null) {
+                game?.board = it
                 handler.removeMessages(MSG_SAVE)
-                val msg = handler.obtainMessage(MSG_SAVE, it)
+                val msg = handler.obtainMessage(MSG_SAVE, game)
                 handler.sendMessageDelayed(msg, (1000 * 10).toLong())
             }
         }
@@ -62,7 +63,8 @@ class BoardViewModel @Inject constructor(val repository: BoardRepository) : View
     fun saveNow() {
         board.value?.let {
             handler.removeMessages(MSG_SAVE)
-            repository.saveBoard(it)
+            game?.board = it
+            repository.saveBoard(game)
         }
     }
 
@@ -76,12 +78,11 @@ class BoardViewModel @Inject constructor(val repository: BoardRepository) : View
     fun generateNewBoard(regen: Boolean, seed: Long = System.currentTimeMillis()) {
         busy.value = true
         val newBoards = repository.getBoard(regen, seed)
-        newBoards.observeForever(object : Observer<Pair<SudokuBoard, SudokuBoard>> {
-            override fun onChanged(b: Pair<SudokuBoard, SudokuBoard>?) {
+        newBoards.observeForever(object : Observer<SudokuGame> {
+            override fun onChanged(b: SudokuGame?) {
                 b?.let {
-                    board.value = it.first
-                    solvedBoard = it.second
-                    this@BoardViewModel.seed = seed
+                    game = it
+                    board.value = it.board
                 }
                 mistakes.value = null
                 busy.value = false
@@ -91,18 +92,17 @@ class BoardViewModel @Inject constructor(val repository: BoardRepository) : View
     }
 
     fun solveBoard() {
-        board.value = solvedBoard?.copy()
+        board.value = game?.solvedBoard?.copy()
     }
 
     fun checkBoard() {
         busy.value = true
         board.value?.let { currentBoard ->
-            if (solvedBoard != null) {
+            if (game != null) {
                 val errors = BooleanArray(SudokuBoard.BOARD_SIZE) {
                     currentBoard.isCommitedValue(it)
-                            && currentBoard.getFirstPossibleValue(it) != solvedBoard?.getFirstPossibleValue(it)
+                            && currentBoard.getFirstPossibleValue(it) != game?.solvedBoard?.getFirstPossibleValue(it)
                 }
-
                 mistakes.value = errors
             }
         }

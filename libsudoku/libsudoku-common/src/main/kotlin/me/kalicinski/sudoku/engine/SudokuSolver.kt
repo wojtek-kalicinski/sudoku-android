@@ -139,59 +139,56 @@ class SudokuSolver(
         fun generate(
                 listener: SolverListener? = null,
                 random: MersenneTwisterRNG? = null
-        ): Pair<SudokuBoard, SudokuBoard>? {
+        ): Pair<SudokuBoard, SudokuBoard> {
             val solver = SudokuSolver(defaultSolvers, random)
             val emptyBoard = IntBoard.fromArray(IntArray(SudokuBoard.BOARD_SIZE))
             val solutions = solver.solve(emptyBoard, 1, UNLIMITED_BACKTRACKING, listener)
-            if (!solutions.isEmpty()) {
-                var startingBoard = solutions[0]
-                val solvedBoard = startingBoard.copy()
-                val removeList = 0.rangeTo(9 * 9 / 2 + 1).toMutableList()
-                if (random != null) {
-                    removeList.shuffle(random)
-                } else {
-                    removeList.shuffle()
-                }
-                var removed = 0
-
-                while (!removeList.isEmpty()) {
-                    val removeI = removeList.removeAt(0)
-                    val tempBoard = startingBoard.copy()
-                    for (i in 1..9) {
-                        tempBoard.addPossibleValue(removeI, i)
-                        tempBoard.addPossibleValue(80 - removeI, i)
-                    }
-
-                    val tempResults = solver.solve(
-                            tempBoard,
-                            2,
-                            UNLIMITED_BACKTRACKING,
-                            listener
-                    )
-                    if (tempResults.size == 1) {
-                        listener?.onBoardChanged(tempBoard)
-                        startingBoard = tempBoard
-                        removed++
-                        if (removed == SudokuBoard.BOARD_SIZE - 18) {
-                            break
-                        }
-                    }
-                }
-
-                for (i in 0 until SudokuBoard.BOARD_SIZE) {
-                    if (startingBoard.possibleValuesNum(i) == 1) {
-                        startingBoard.setCommitedValue(i, true)
-                        startingBoard.setStartingValue(i, true)
-                        solvedBoard.setStartingValue(i, true)
-                    } else {
-                        startingBoard.setValue(i, 1, false)
-                        startingBoard.removePossibleValue(i, 1)
-                    }
-                }
-
-                return Pair(startingBoard, solvedBoard)
+            //starting from empty, solutions can't be empty
+            var startingBoard = solutions[0]
+            val solvedBoard = startingBoard.copy()
+            val removeList = 0.rangeTo(9 * 9 / 2 + 1).toMutableList()
+            if (random != null) {
+                removeList.shuffle(random)
+            } else {
+                removeList.shuffle()
             }
-            return null
+            var removed = 0
+
+            while (!removeList.isEmpty()) {
+                val removeI = removeList.removeAt(0)
+                val tempBoard = startingBoard.copy()
+                for (i in 1..9) {
+                    tempBoard.addPossibleValue(removeI, i)
+                    tempBoard.addPossibleValue(80 - removeI, i)
+                }
+
+                val tempResults = solver.solve(
+                        tempBoard,
+                        2,
+                        UNLIMITED_BACKTRACKING,
+                        listener
+                )
+                if (tempResults.size == 1) {
+                    listener?.onBoardChanged(tempBoard)
+                    startingBoard = tempBoard
+                    removed++
+                    if (removed == SudokuBoard.BOARD_SIZE - 18) {
+                        break
+                    }
+                }
+            }
+
+            for (i in 0 until SudokuBoard.BOARD_SIZE) {
+                if (startingBoard.possibleValuesNum(i) == 1) {
+                    startingBoard.setCommitedValue(i, true)
+                    startingBoard.setStartingValue(i, true)
+                    solvedBoard.setStartingValue(i, true)
+                } else {
+                    startingBoard.setValue(i, 1, false)
+                    startingBoard.removePossibleValue(i, 1)
+                }
+            }
+            return Pair(startingBoard, solvedBoard)
         }
     }
 

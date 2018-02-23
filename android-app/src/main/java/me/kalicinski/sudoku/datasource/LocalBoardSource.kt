@@ -4,10 +4,12 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import androidx.content.edit
-import com.google.gson.Gson
+import com.google.gson.*
 import me.kalicinski.sudoku.engine.IntBoard
 import me.kalicinski.sudoku.engine.SudokuBoard
+import me.kalicinski.sudoku.engine.SudokuGame
 import me.kalicinski.sudoku.engine.SudokuSolver
+import java.lang.reflect.Type
 import javax.inject.Inject
 
 private const val PREF_BOARD = "PREF_BOARD"
@@ -15,34 +17,31 @@ private const val PREF_BOARD = "PREF_BOARD"
 class LocalBoardSource @Inject constructor(context: Context) {
 
     private val appContext: Context = context.applicationContext
-    private val gson = Gson()
+    private val gson = GsonBuilder().apply {
+        registerTypeAdapter(SudokuBoard::class.java, object : JsonDeserializer<SudokuBoard> {
+            override fun deserialize(json: JsonElement?, typeOfT: Type?, context: JsonDeserializationContext?): SudokuBoard {
+                return context?.deserialize(json, IntBoard::class.java)!!
+            }
+        })
+        registerTypeAdapter(SudokuBoard::class.java, object : JsonSerializer<SudokuBoard> {
+            override fun serialize(src: SudokuBoard?, typeOfSrc: Type?, context: JsonSerializationContext?): JsonElement {
+                return context?.serialize(src, IntBoard::class.java)!!
+            }
+        })
+
+    }.create()
 
     private val sharedPreferences: SharedPreferences by lazy {
         PreferenceManager.getDefaultSharedPreferences(appContext)
     }
 
-    var board: Pair<SudokuBoard, SudokuBoard?>?
+    var game: SudokuGame?
         get() {
-            return sharedPreferences.getString(PREF_BOARD,null)?.let {
-                val loadedBoard = gson.fromJson(it, IntBoard::class.java)
-
-                //need to recreate the solution
-                //let's start with an empty starting board
-                val startingBoard = loadedBoard.copy()
-                for (i in 0 until SudokuBoard.BOARD_SIZE) {
-                    with(startingBoard) {
-                        if (!isStartingValue(i)) {
-                            clearValues(i)
-                        }
-                    }
-                }
-                //and calculate the solved board
-                val solutions = SudokuSolver(SudokuSolver.defaultSolvers).solve(startingBoard)
-                when {
-                    solutions.isNotEmpty() ->
-                        Pair<SudokuBoard, SudokuBoard>(loadedBoard, solutions[0])
-                    else -> null
-                }
+            return sharedPreferences.getString(PREF_BOARD, null)?.let {
+                println(it)
+                val loadedBoard = gson.fromJson(it, SudokuGame::class.java)
+                loadedBoard.calculateSolution()
+                return loadedBoard
             }
         }
         set(value) {
@@ -50,7 +49,7 @@ class LocalBoardSource @Inject constructor(context: Context) {
                 if (value != null) {
                     putString(
                             PREF_BOARD,
-                            gson.toJson(value.first)
+                            gson.toJson(value)
                     )
                 } else {
                     remove(PREF_BOARD)

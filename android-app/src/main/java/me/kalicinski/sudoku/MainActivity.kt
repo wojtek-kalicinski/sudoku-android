@@ -88,7 +88,7 @@ class MainActivity : AppCompatActivity() {
                     setAction(Intent.ACTION_SEND)
                     putExtra(
                             Intent.EXTRA_TEXT,
-                            "https://sudokuplayground.firebaseapp.com/sudoku/${boardViewModel.seed}"
+                            "https://sudokuplayground.firebaseapp.com/sudoku/${boardViewModel.game?.seed}"
                     );
                     setType("text/plain")
                     startActivity(Intent.createChooser(this, getString(R.string.send_to)));
