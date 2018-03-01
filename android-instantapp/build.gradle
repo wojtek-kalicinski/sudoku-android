@@ -17,6 +17,15 @@
 
 apply plugin: 'com.android.instantapp'
 
+android {
+    buildTypes {
+        debugMini
+        debugMiniOptim
+        release
+        releaseOptim
+    }
+}
+
 dependencies {
     implementation project(':android-app')
 }

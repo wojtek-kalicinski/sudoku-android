@@ -1,5 +1,11 @@
 -dontwarn com.google.errorprone.annotations.**
 
--keep class IntBoard {
-    int[] grid;
+-keepnames class me.kalicinski.sudoku.engine.IntBoard {
+    <fields>;
 }
+
+-keepnames class me.kalicinski.sudoku.engine.SudokuGame {
+    <fields>;
+}
+
+-dontwarn android.databinding.*

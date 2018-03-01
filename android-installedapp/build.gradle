@@ -31,8 +31,8 @@ android {
         applicationId "me.kalicinski.sudoku"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 1
-        versionName "1.0"
+        versionCode 3
+        versionName "1.0.3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
@@ -55,14 +55,14 @@ android {
             initWith debug
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'),
-                    "proguard-rules.pro"
+                    "../android-app/proguard.pro"
             matchingFallbacks = ['debug']
         }
 
         debugMiniOptim {
             initWith debugMini
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
-                    "proguard.pro", "aggressive.pro"
+                    "../android-app/proguard.pro", "aggressive.pro"
             matchingFallbacks = ['debug']
         }
 
@@ -70,13 +70,13 @@ android {
             signingConfig signingConfigs.release
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'),
-                    "proguard-rules.pro"
+                    "../android-app/proguard.pro"
         }
 
         releaseOptim {
             initWith release
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
-                    "proguard-rules.pro", "aggressive.pro"
+                    "../android-app/proguard.pro", "aggressive.pro"
             matchingFallbacks = ['release']
         }
     }
