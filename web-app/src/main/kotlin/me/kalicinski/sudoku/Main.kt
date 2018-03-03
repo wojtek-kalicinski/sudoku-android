@@ -50,8 +50,8 @@ fun generate() {
             window.location.pathname.lastIndexOf('/') + 1
     ).toLongOrNull()
     val boardPair = seed?.let {
-        SudokuSolver.generate(random = MersenneTwisterRNG(it))!!
-    } ?: SudokuSolver.generate()!!
+        SudokuSolver.generate(random = MersenneTwisterRNG(it))
+    } ?: SudokuSolver.generate()
     solvedBoard = boardPair.second
     val board = boardPair.first
 

@@ -29,16 +29,16 @@ keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 android {
     baseFeature true
 
-    compileSdkVersion 27
-    buildToolsVersion "27.0.3"
+    compileSdkVersion buildConfig.compileSdk
+    buildToolsVersion versions.buildTools
+
     defaultConfig {
-        versionCode 3
-        versionName "1.0.3"
-        minSdkVersion 21
-        targetSdkVersion 27
+        versionCode buildConfig.version
+        versionName buildConfig.versionName
+        minSdkVersion buildConfig.minSdk
+        targetSdkVersion buildConfig.targetSdk
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        vectorDrawables.useSupportLibrary = true
-        consumerProguardFiles 'proguard.pro'
+        consumerProguardFiles "proguard.pro"
     }
 
     dataBinding {
@@ -58,31 +58,26 @@ android {
         debugMini {
             initWith debug
             minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'),
-                    "proguard.pro"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), "proguard.pro"
             matchingFallbacks = ['debug']
         }
 
         debugMiniOptim {
             initWith debugMini
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
-                    "proguard.pro", "aggressive.pro"
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), "proguard.pro"
             matchingFallbacks = ['debug']
         }
 
         release {
             signingConfig signingConfigs.release
             minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'),
-                    "proguard.pro"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), "proguard.pro"
         }
 
         releaseOptim {
             initWith release
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
-                    "proguard.pro", "aggressive.pro"
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), "proguard.pro"
             matchingFallbacks = ['release']
-            consumerProguardFiles 'proguard.pro', 'aggressive.pro'
         }
     }
 }
@@ -91,27 +86,27 @@ dependencies {
     application project(':android-installedapp')
 
     api project(":libsudoku-jvm")
-    api 'com.android.support:appcompat-v7:27.0.2'
-    api 'com.android.support.constraint:constraint-layout:1.0.2'
-    api 'com.android.support:support-annotations:27.0.2'
-    api 'com.android.support:appcompat-v7:27.0.2'
-    implementation 'com.google.android.instantapps:instantapps:1.1.0'
+    api "com.android.support:appcompat-v7:${versions.supportLibrary}"
+    api "com.android.support.constraint:constraint-layout:${versions.constraintLayout}"
+    api "com.android.support:support-annotations:${versions.supportLibrary}"
+    api "com.android.support:appcompat-v7:${versions.supportLibrary}"
+    implementation "com.google.android.instantapps:instantapps:${versions.instantApps}"
 
-    api "android.arch.lifecycle:extensions:1.1.0"
+    api "android.arch.lifecycle:extensions:${versions.lifecycles}"
 
-    implementation 'androidx.core:core-ktx:0.1'
+    implementation "androidx.core:core-ktx:${versions.androidktx}"
 
-    implementation 'com.google.android.gms:play-services-oss-licenses:11.8.0'
+    implementation "com.google.android.gms:play-services-oss-licenses:${versions.playServices}"
 
-    implementation 'com.google.code.gson:gson:2.8.2'
+    implementation "com.google.code.gson:gson:${versions.gson}"
 
-    api 'com.google.dagger:dagger:2.14.1'
-    api 'com.google.dagger:dagger-android-support:2.14.1'
-    kapt 'com.google.dagger:dagger-compiler:2.14.1'
-    kapt 'com.google.dagger:dagger-android-processor:2.14.1'
+    api "com.google.dagger:dagger:${versions.dagger}"
+    api "com.google.dagger:dagger-android-support:${versions.dagger}"
+    kapt "com.google.dagger:dagger-compiler:${versions.dagger}"
+    kapt "com.google.dagger:dagger-android-processor:${versions.dagger}"
 
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
+//    testImplementation 'junit:junit:4.12'
+//    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
+//        exclude group: 'com.android.support', module: 'support-annotations'
+//    })
 }

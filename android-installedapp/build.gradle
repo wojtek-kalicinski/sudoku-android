@@ -25,16 +25,16 @@ def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion buildConfig.compileSdk
+    buildToolsVersion versions.buildTools
 
     defaultConfig {
         applicationId "me.kalicinski.sudoku"
-        minSdkVersion 21
-        targetSdkVersion 27
-        versionCode 3
-        versionName "1.0.3"
+        versionCode buildConfig.version
+        versionName buildConfig.versionName
+        minSdkVersion buildConfig.minSdk
+        targetSdkVersion buildConfig.targetSdk
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        vectorDrawables.useSupportLibrary = true
     }
 
     dataBinding {
@@ -54,29 +54,27 @@ android {
         debugMini {
             initWith debug
             minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'),
-                    "../android-app/proguard.pro"
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt')
             matchingFallbacks = ['debug']
         }
 
         debugMiniOptim {
             initWith debugMini
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
-                    "../android-app/proguard.pro", "aggressive.pro"
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt')
             matchingFallbacks = ['debug']
         }
 
         release {
             signingConfig signingConfigs.release
             minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'),
-                    "../android-app/proguard.pro"
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt')
         }
 
         releaseOptim {
             initWith release
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
-                    "../android-app/proguard.pro", "aggressive.pro"
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt')
             matchingFallbacks = ['release']
         }
     }

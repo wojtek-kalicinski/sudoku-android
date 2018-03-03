@@ -19,5 +19,5 @@ apply plugin: 'kotlin-platform-js'
 
 dependencies {
     expectedBy project(':prng-common')
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-js:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-js:${versions.kotlin}"
 }

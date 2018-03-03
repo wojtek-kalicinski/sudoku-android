@@ -30,7 +30,7 @@ import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import me.kalicinski.sudoku.basefeature.R
+import me.kalicinski.sudoku.R
 import me.kalicinski.sudoku.engine.SudokuBoard
 
 class BoardView @JvmOverloads constructor(

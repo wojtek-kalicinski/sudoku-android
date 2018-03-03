@@ -19,10 +19,10 @@ apply plugin: 'kotlin-platform-js'
 
 dependencies {
     implementation project(":libsudoku-js")
-    compile "org.jetbrains.kotlin:kotlin-stdlib-js:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-stdlib-js:${versions.kotlin}"
     compile "org.jetbrains.kotlinx:kotlinx-html-js:0.6.8"
-    testCompile "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
-    testCompile "org.jetbrains.kotlin:kotlin-test-js:$kotlin_version"
+    testCompile "org.jetbrains.kotlin:kotlin-test:${versions.kotlin}"
+    testCompile "org.jetbrains.kotlin:kotlin-test-js:${versions.kotlin}"
 }
 
 

@@ -26,8 +26,7 @@ import android.view.MenuItem
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.google.android.instantapps.InstantApps
 import dagger.android.AndroidInjection
-import me.kalicinski.sudoku.basefeature.R
-import me.kalicinski.sudoku.basefeature.databinding.ActivityMainBinding
+import me.kalicinski.sudoku.databinding.ActivityMainBinding
 import javax.inject.Inject
 
 

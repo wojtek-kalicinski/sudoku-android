@@ -16,15 +16,37 @@
  */
 
 buildscript {
-    ext.kotlin_version = '1.2.21'
+
+    ext.buildConfig = [
+            'compileSdk': 27,
+            'minSdk': 21,
+            'targetSdk': 27,
+            'version': 3,
+            'versionName': "1.0.3",
+    ]
+
+    ext.versions = [
+            'buildTools': '27.0.3',
+            'supportLibrary': '27.1.0',
+            'constraintLayout': '1.0.2',
+            'instantApps': '1.1.0',
+            'lifecycles': '1.1.0',
+            'androidktx': '0.2',
+            'playServices': '11.8.0',
+            'gson': '2.8.2',
+            'kotlin': '1.2.30',
+            'dagger': '2.14.1',
+    ]
+
 
     repositories {
         jcenter()
         google()
     }
     dependencies {
+        //noinspection GradleDependency
         classpath 'com.android.tools.build:gradle:3.1.0-beta4'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}"
         classpath 'com.google.gms:google-services:3.1.1'
         classpath "com.google.gms:oss-licenses:0.9.1"
     }
@@ -35,6 +57,17 @@ allprojects {
         jcenter()
         google()
     }
+
+    configurations.all {
+        resolutionStrategy {
+            eachDependency { details ->
+                if (details.requested.group == 'com.android.support') {
+                    details.useVersion versions.supportLibrary
+                }
+            }
+        }
+    }
+
 }
 
 task clean(type: Delete) {
