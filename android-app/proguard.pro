@@ -13,3 +13,4 @@
     <fields>;
 }
 
+-keep class android.support.v7.app.AppCompatViewInflater
