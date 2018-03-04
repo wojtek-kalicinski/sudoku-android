@@ -20,18 +20,17 @@ package me.kalicinski.sudoku
 import android.animation.AnimatorInflater
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
 import android.graphics.Rect
 import android.support.v4.content.ContextCompat
-import android.support.v4.content.res.ResourcesCompat
 import android.util.AttributeSet
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import me.kalicinski.sudoku.R
+import me.kalicinski.multiplatform.MultiCanvas
 import me.kalicinski.sudoku.engine.SudokuBoard
+import me.kalicinski.sudoku.renderer.drawBoard
+import me.kalicinski.sudoku.renderer.drawCell
 
 class BoardView @JvmOverloads constructor(
         context: Context,
@@ -44,10 +43,23 @@ class BoardView @JvmOverloads constructor(
             setTag(R.id.tag_cell_index, it)
         }
     }
-    private val paint = Paint()
-    private val paint2 = Paint()
+
     private val strokeWidthNormal: Float
     private val strokeWidthBold: Float
+
+    private val colorFocused: Int
+    private val colorChangeable: Int
+    private val colorIncorrect: Int
+    private val colorHighlight: Int
+
+    private val multiCanvas = MultiCanvas()
+
+    init {
+        colorFocused = ContextCompat.getColor(context, R.color.paint_color_focused)
+        colorChangeable = ContextCompat.getColor(context, R.color.paint_color_changeable)
+        colorIncorrect = ContextCompat.getColor(context, R.color.paint_color_incorrect)
+        colorHighlight = ContextCompat.getColor(context, R.color.primary_light)
+    }
 
     var onBoardChangedListener: OnBoardChangeListener? = null
 
@@ -59,19 +71,17 @@ class BoardView @JvmOverloads constructor(
         )
     }
 
+    private var color1: Int
+    private var color2: Int
+
     init {
         setWillNotDraw(false)
         cells.forEach {
             addView(it)
         }
-        paint.apply {
-            color = ContextCompat.getColor(context, R.color.paint_color_1)
-            style = Paint.Style.STROKE
-        }
-        paint2.apply {
-            color = ContextCompat.getColor(context, R.color.paint_color_2)
-            style = Paint.Style.STROKE
-        }
+        color1 = ContextCompat.getColor(context, R.color.paint_color_1)
+        color2 = ContextCompat.getColor(context, R.color.paint_color_2)
+
         strokeWidthBold = context.resources.getDimension(R.dimen.line_width_bold)
         strokeWidthNormal = context.resources.getDimension(R.dimen.line_width)
     }
@@ -122,21 +132,16 @@ class BoardView @JvmOverloads constructor(
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        for (i in 0..9) {
-            if (i % 3 == 0) {
-                paint.strokeWidth = strokeWidthBold
-                if (i > 0 && i < 9) {
-                    canvas.drawLine(i * width / 9f, 0f, i * width / 9f, height.toFloat(), paint)
-                }
-                canvas.drawLine(0f, i * height / 9f, width.toFloat(), i * height / 9f, paint)
-            } else {
-                paint.strokeWidth = strokeWidthNormal
-                if (i > 0 && i < 9) {
-                    canvas.drawLine(i * width / 9f, 0f, i * width / 9f, height.toFloat(), paint2)
-                }
-                canvas.drawLine(0f, i * height / 9f, width.toFloat(), i * height / 9f, paint2)
-            }
-        }
+        multiCanvas.canvas = canvas
+        drawBoard(
+                multiCanvas,
+                width.toFloat(),
+                height.toFloat(),
+                strokeWidthBold,
+                strokeWidthNormal,
+                color1,
+                color2
+        )
     }
 
     fun setBoard(board: SudokuBoard?) {
@@ -165,8 +170,6 @@ class BoardView @JvmOverloads constructor(
             defStyleAttr: Int = 0,
             defStyleRes: Int = 0
     ) : View(context, attrs, defStyleAttr, defStyleRes) {
-        private val paint = Paint()
-        private val textBounds = Rect()
         private val numbersShowing = HashSet<Int>(9)
         var isNumberConfirmed = false
             set(numberConfirmed) {
@@ -265,7 +268,6 @@ class BoardView @JvmOverloads constructor(
             }
         }
 
-        private val highlightColor: Int
         private var bigNumberHeight: Float = 0F
         private var smallNumberHeight: Float = 0F
         var isChangeable: Boolean = false
@@ -318,16 +320,9 @@ class BoardView @JvmOverloads constructor(
                 }
             }
             gestureDetector.setOnDoubleTapListener(null)
-            paint.isAntiAlias = true
-            paint.textAlign = Paint.Align.CENTER
             isChangeable = true
             isFocusable = true
             isFocusableInTouchMode = true
-            highlightColor = ResourcesCompat.getColor(
-                    resources,
-                    R.color.primary_light,
-                    context.theme
-            )
         }
 
 
@@ -372,66 +367,23 @@ class BoardView @JvmOverloads constructor(
 
         override fun onDraw(canvas: Canvas) {
             super.onDraw(canvas)
-            if (isFocused) {
-                paint.color = ContextCompat.getColor(context, R.color.paint_color_focused)
-                canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), paint)
-            }
-
-            paint.color = if (isChangeable) {
-                ContextCompat.getColor(context, R.color.paint_color_changeable)
-            } else {
-                Color.BLACK
-            }
-
-            if (isNumberIncorrect) {
-                paint.color = ContextCompat.getColor(context, R.color.paint_color_incorrect)
-            }
-
-            if (isNumberConfirmed) {
-                paint.textSize = bigNumberHeight
-                val bigNumber = numbersShowing.iterator().next().toString()
-                paint.getTextBounds(bigNumber, 0, 1, textBounds)
-                canvas.drawText(
-                        bigNumber,
-                        0,
-                        1,
-                        width / 2f,
-                        height / 2f - textBounds.bottom
-                                + Math.abs(textBounds.bottom - textBounds.top) / 2.0f,
-                        paint
-                )
-            } else {
-                for (i in numbersShowing) {
-                    val x = (i - 1) % 3
-                    val y = (i - 1) / 3
-                    val numberHighlighted = 0
-                    if (numberHighlighted == i) {
-                        val color = paint.color
-                        paint.color = highlightColor
-                        canvas.drawRect(
-                                x * width / 3f,
-                                y * height / 3f,
-                                (x + 1) * width / 3f,
-                                (y + 1) * height / 3f,
-                                paint
-                        )
-                        paint.color = color
-                    }
-
-                    paint.textSize = smallNumberHeight
-                    paint.getTextBounds(i.toString(), 0, 1, textBounds)
-                    val textSizeHalf = Math.abs(textBounds.bottom - textBounds.top) / 2.0f
-                    canvas.drawText(
-                            i.toString(),
-                            0,
-                            1,
-                            x * width / 3f + width / 6f,
-                            y * height / 3f + textBounds.bottom.toFloat()
-                                    + textSizeHalf + height / 6f,
-                            paint
-                    )
-                }
-            }
+            multiCanvas.canvas = canvas
+            drawCell(
+                    multiCanvas,
+                    numbersShowing,
+                    width.toFloat(),
+                    height.toFloat(),
+                    isFocused,
+                    isChangeable,
+                    isNumberIncorrect,
+                    isNumberConfirmed,
+                    colorFocused,
+                    colorChangeable,
+                    colorIncorrect,
+                    colorHighlight,
+                    bigNumberHeight,
+                    smallNumberHeight
+            )
         }
     }
 }

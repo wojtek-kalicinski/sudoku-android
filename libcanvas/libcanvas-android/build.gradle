@@ -14,13 +14,22 @@
  * limitations under the License.
  *  
  */
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-platform-android'
 
-apply plugin: 'kotlin-platform-jvm'
+android {
+    compileSdkVersion buildConfig.compileSdk
+    buildToolsVersion versions.buildTools
+
+    defaultConfig {
+        minSdkVersion buildConfig.minSdk
+        targetSdkVersion buildConfig.targetSdk
+    }
+}
 
 dependencies {
-    expectedBy project(':libsudoku-common')
-    compile project(':prng-jvm')
+    expectedBy project(':libcanvas-common')
     implementation "org.jetbrains.kotlin:kotlin-stdlib:${versions.kotlin}"
-    testCompile "org.jetbrains.kotlin:kotlin-test:${versions.kotlin}"
-    testCompile "org.jetbrains.kotlin:kotlin-test-junit:${versions.kotlin}"
+//    testCompile "org.jetbrains.kotlin:kotlin-test:${versions.kotlin}"
+//    testCompile "org.jetbrains.kotlin:kotlin-test-junit:${versions.kotlin}"
 }

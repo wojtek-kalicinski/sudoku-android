@@ -18,7 +18,9 @@
 apply plugin: 'kotlin-platform-js'
 
 dependencies {
-    implementation project(":libsudoku-js")
+    compile project(":libsudokurenderer-js")
+    compile project(":libsudoku-js")
+    compile project(":libcanvas-js")
     compile "org.jetbrains.kotlin:kotlin-stdlib-js:${versions.kotlin}"
     compile "org.jetbrains.kotlinx:kotlinx-html-js:0.6.8"
     testCompile "org.jetbrains.kotlin:kotlin-test:${versions.kotlin}"

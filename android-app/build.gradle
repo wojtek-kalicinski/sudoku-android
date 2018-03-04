@@ -17,7 +17,7 @@
 
 apply plugin: 'com.android.feature'
 //apply plugin: 'com.google.gms.oss.licenses.plugin'
-apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-platform-android'
 apply plugin: 'kotlin-kapt'
 
 // Create a variable called keystorePropertiesFile, and initialize it to your
@@ -85,7 +85,10 @@ android {
 dependencies {
     application project(':android-installedapp')
 
-    api project(":libsudoku-jvm")
+    implementation project(":libsudoku-jvm")
+    implementation project(":libcanvas-android")
+    implementation project(":libsudokurenderer-android")
+
     api "com.android.support:appcompat-v7:${versions.supportLibrary}"
     api "com.android.support.constraint:constraint-layout:${versions.constraintLayout}"
     api "com.android.support:support-annotations:${versions.supportLibrary}"

@@ -15,12 +15,10 @@
  *  
  */
 
-apply plugin: 'kotlin-platform-jvm'
+apply plugin: 'kotlin-platform-common'
 
 dependencies {
-    expectedBy project(':libsudoku-common')
-    compile project(':prng-jvm')
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:${versions.kotlin}"
-    testCompile "org.jetbrains.kotlin:kotlin-test:${versions.kotlin}"
-    testCompile "org.jetbrains.kotlin:kotlin-test-junit:${versions.kotlin}"
+    compile "org.jetbrains.kotlin:kotlin-stdlib-common:${versions.kotlin}"
+    testCompile "org.jetbrains.kotlin:kotlin-test-common:${versions.kotlin}"
+    testCompile "org.jetbrains.kotlin:kotlin-test-annotations-common:${versions.kotlin}"
 }

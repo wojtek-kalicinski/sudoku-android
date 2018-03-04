@@ -15,12 +15,9 @@
  *  
  */
 
-apply plugin: 'kotlin-platform-jvm'
+apply plugin: 'kotlin-platform-js'
 
 dependencies {
-    expectedBy project(':libsudoku-common')
-    compile project(':prng-jvm')
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:${versions.kotlin}"
-    testCompile "org.jetbrains.kotlin:kotlin-test:${versions.kotlin}"
-    testCompile "org.jetbrains.kotlin:kotlin-test-junit:${versions.kotlin}"
+    expectedBy project(':libcanvas-common')
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-js:${versions.kotlin}"
 }

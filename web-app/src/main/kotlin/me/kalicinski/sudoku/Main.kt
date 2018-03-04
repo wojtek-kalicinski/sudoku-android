@@ -17,33 +17,33 @@
 
 package me.kalicinski.sudoku
 
-import kotlinx.html.dom.create
-import kotlinx.html.id
-import kotlinx.html.table
-import kotlinx.html.td
-import kotlinx.html.tr
+import me.kalicinski.multiplatform.MultiCanvas
 import me.kalicinski.sudoku.engine.SudokuSolver
 import me.kalicinski.sudoku.engine.SudokuBoard
+import me.kalicinski.sudoku.renderer.drawBoard
+import me.kalicinski.sudoku.renderer.drawCell
 import org.uncommons.maths.random.MersenneTwisterRNG
+import org.w3c.dom.CanvasRenderingContext2D
+import org.w3c.dom.HTMLCanvasElement
 import kotlin.browser.document
 import kotlin.browser.window
 
-fun main(args: Array<String>) {
-    var i = 0;
-    document.body!!.append(document.create.table {
-        (0..8).forEach {
-            tr {
-                (0..8).forEach {
-                    td {
-                        id = "cell${i++}"
-                    }
-                }
-            }
-        }
-    })
+lateinit var canvas: MultiCanvas
+lateinit var canvasEl: HTMLCanvasElement
+var board: SudokuBoard? = null
+var solvedBoard: SudokuBoard? = null
+
+fun init(){
+    println("init")
+    canvasEl = document.getElementById("board") as HTMLCanvasElement
+    val canvasCtx: CanvasRenderingContext2D = canvasEl.getContext("2d") as CanvasRenderingContext2D
+    canvas = MultiCanvas(canvasCtx)
+    generate()
 }
 
-var solvedBoard: SudokuBoard? = null
+fun main(args: Array<String>) {
+    window.onload = { init() }
+}
 
 fun generate() {
     val seed = window.location.pathname.substring(
@@ -53,20 +53,59 @@ fun generate() {
         SudokuSolver.generate(random = MersenneTwisterRNG(it))
     } ?: SudokuSolver.generate()
     solvedBoard = boardPair.second
-    val board = boardPair.first
-
-    (0 until SudokuBoard.BOARD_SIZE).forEach {
-        document.getElementById("cell${it}")!!.textContent = if (board.hasPossibleValue(it)){
-            board.getFirstPossibleValue(it).toString()
-        } else {
-            ""
-        }
-    }
+    board = boardPair.first
+    redraw()
 }
 
 fun solve() {
-    (0 until SudokuBoard.BOARD_SIZE).forEach {
-        document.getElementById("cell${it}")!!.textContent =
-                solvedBoard?.getFirstPossibleValue(it).toString()
+    board = solvedBoard
+    redraw()
+}
+
+fun redraw() {
+    //clear
+    canvas.color = 0xFFFFFFFF.toInt() //white
+    canvas.fillRect(
+            0f,
+            0f,
+            canvasEl.width.toFloat(),
+            canvasEl.height.toFloat()
+    )
+    drawBoard(
+            canvas,
+            canvasEl.width.toFloat(),
+            canvasEl.height.toFloat(),
+            2f,
+            1f,
+            0xFF212121.toInt(),
+            0xFF757575.toInt()
+    )
+
+    val cellWidth = canvasEl.width.toFloat() / 9
+    val cellHeight = canvasEl.height.toFloat() / 9
+
+    for (i in 0 until SudokuBoard.BOARD_SIZE){
+        canvas.canvas.save()
+        canvas.canvas.translate(
+                (SudokuBoard.getColumn(i) * cellWidth).toDouble(),
+                (SudokuBoard.getRow(i) * cellHeight).toDouble()
+        )
+        drawCell(
+                canvas,
+                board?.possibleValues(i)?.toSet() ?: emptySet(),
+                cellWidth,
+                cellHeight,
+                false,
+                board?.isStartingValue(i) == false,
+                false,
+                board?.isCommitedValue(i) == true,
+                0xFFe6e6e6.toInt(),
+                0xFF777777.toInt(),
+                0xFFBB0000.toInt(),
+                0xFFFFECB3.toInt(),
+                0.8f * cellHeight,
+                0.2f * cellHeight
+        )
+        canvas.canvas.restore()
     }
 }
