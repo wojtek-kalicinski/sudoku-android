@@ -50,6 +50,7 @@ actual class MultiCanvas actual constructor() {
     }
 
     actual fun drawText(text: String, x: Float, y: Float) {
+        paint.style = Paint.Style.FILL
         canvas.drawText(text, x, y, paint)
     }
 
