@@ -80,6 +80,11 @@ android {
             matchingFallbacks = ['release']
         }
     }
+
+    packagingOptions {
+        exclude "META-INF/*.kotlin_module"
+    }
+
 }
 
 dependencies {

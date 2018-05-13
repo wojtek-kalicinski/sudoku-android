@@ -26,15 +26,15 @@ buildscript {
     ]
 
     ext.versions = [
-            'buildTools': '27.0.3',
-            'supportLibrary': '27.1.0',
-            'constraintLayout': '1.0.2',
+            'buildTools': '28.0.0-rc2',
+            'supportLibrary': '27.1.1',
+            'constraintLayout': '1.1.0',
             'instantApps': '1.1.0',
-            'lifecycles': '1.1.0',
-            'androidktx': '0.2',
-            'playServices': '11.8.0',
+            'lifecycles': '1.1.1',
+            'androidktx': '0.3',
+            'playServices': '15.0.1',
             'gson': '2.8.2',
-            'kotlin': '1.2.30',
+            'kotlin': '1.2.41',
             'dagger': '2.14.1',
     ]
 
@@ -45,10 +45,10 @@ buildscript {
     }
     dependencies {
         //noinspection GradleDependency
-        classpath 'com.android.tools.build:gradle:3.1.0-beta4'
+        classpath 'com.android.tools.build:gradle:3.2.0-alpha14'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}"
         classpath 'com.google.gms:google-services:3.1.1'
-        classpath "com.google.gms:oss-licenses:0.9.1"
+        classpath "com.google.gms:oss-licenses:0.9.2"
     }
 }
 
