@@ -108,6 +108,9 @@ dependencies {
 
     implementation "com.google.code.gson:gson:${versions.gson}"
 
+    implementation "com.firebaseui:firebase-ui-auth:${versions.firebaseuiauth}"
+    implementation "com.google.firebase:firebase-auth:${versions.playServices}"
+
     api "com.google.dagger:dagger:${versions.dagger}"
     api "com.google.dagger:dagger-android-support:${versions.dagger}"
     kapt "com.google.dagger:dagger-compiler:${versions.dagger}"

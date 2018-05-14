@@ -17,6 +17,8 @@
 
 package me.kalicinski.sudoku
 
+import android.content.Context
+import com.google.firebase.FirebaseApp
 import dagger.android.AndroidInjector
 import dagger.android.DaggerApplication
 import me.kalicinski.sudoku.di.DaggerAppComponent
@@ -30,5 +32,4 @@ class SudokuApplication : DaggerApplication() {
     override fun onCreate() {
         super.onCreate()
     }
-
 }

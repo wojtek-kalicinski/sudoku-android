@@ -25,6 +25,7 @@ import dagger.Provides
 import me.kalicinski.sudoku.BoardRepository
 import me.kalicinski.sudoku.BoardViewModel
 import me.kalicinski.sudoku.SudokuApplication
+import me.kalicinski.sudoku.datasource.UserSource
 
 @Module
 abstract class AppModule {
@@ -35,6 +36,10 @@ abstract class AppModule {
         internal fun providesContext(application: SudokuApplication): Context {
             return application.applicationContext
         }
+
+        @Provides
+        @JvmStatic
+        internal fun providesUserSource() = UserSource()
 
     }
 }

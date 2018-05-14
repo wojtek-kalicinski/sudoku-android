@@ -3,6 +3,10 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/signin"
+        android:title="@string/sign_in"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/share"
         android:icon="@drawable/ic_share_black_24dp"
         android:title="@string/share_board"
@@ -10,7 +14,7 @@
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/oss_info"
-        android:title="Open-source"
+        android:title="@string/open_source"
         app:showAsAction="never" />
 
 </menu>

@@ -23,16 +23,18 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModel
 import android.os.Handler
 import android.os.Message
+import me.kalicinski.sudoku.datasource.UserSource
 import me.kalicinski.sudoku.engine.SudokuBoard
 import me.kalicinski.sudoku.engine.SudokuGame
 import javax.inject.Inject
 
 
-class BoardViewModel @Inject constructor(val repository: BoardRepository) : ViewModel() {
+class BoardViewModel @Inject constructor(private val repository: BoardRepository, private val userSource: UserSource) : ViewModel() {
     var game: SudokuGame? = null
     val board = MutableLiveData<SudokuBoard>()
     val busy = MutableLiveData<Boolean>()
     val mistakes = MutableLiveData<BooleanArray>()
+    val userPresent = MutableLiveData<Boolean>()
 
     companion object {
         const val MSG_SAVE = 1
@@ -50,13 +52,16 @@ class BoardViewModel @Inject constructor(val repository: BoardRepository) : View
     }
 
     init {
-        board.observeForever {
-            if (it != null) {
-                game?.board = it
+        board.observeForever { sudokuBoard ->
+            if (sudokuBoard != null) {
+                game?.board = sudokuBoard
                 handler.removeMessages(MSG_SAVE)
                 val msg = handler.obtainMessage(MSG_SAVE, game)
                 handler.sendMessageDelayed(msg, (1000 * 10).toLong())
             }
+        }
+        userSource.user.observeForever { user ->
+            userPresent.value = user != null
         }
     }
 
@@ -122,5 +127,10 @@ class BoardViewModel @Inject constructor(val repository: BoardRepository) : View
             board.value = it
             mistakes.value = null
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        userSource.shutdown()
     }
 }

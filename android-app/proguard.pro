@@ -14,3 +14,5 @@
 }
 
 -keep class android.support.v7.app.AppCompatViewInflater
+
+-dontwarn retrofit2.Call

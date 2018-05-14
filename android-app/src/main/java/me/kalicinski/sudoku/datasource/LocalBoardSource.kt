@@ -37,7 +37,6 @@ class LocalBoardSource @Inject constructor(context: Context) {
     var game: SudokuGame?
         get() {
             return sharedPreferences.getString(PREF_BOARD, null)?.let {
-                println(it)
                 val loadedBoard = gson.fromJson(it, SudokuGame::class.java)
                 loadedBoard.calculateSolution()
                 return loadedBoard

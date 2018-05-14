@@ -29,3 +29,5 @@ android {
 dependencies {
     implementation project(':android-app')
 }
+
+apply plugin: 'com.google.gms.google-services'

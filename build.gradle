@@ -17,12 +17,14 @@
 
 buildscript {
 
+    def version = 4
+
     ext.buildConfig = [
             'compileSdk': 27,
             'minSdk': 21,
             'targetSdk': 27,
-            'version': 3,
-            'versionName': "1.0.3",
+            'version': version,
+            'versionName': "1.0-${version}",
     ]
 
     ext.versions = [
@@ -32,7 +34,8 @@ buildscript {
             'instantApps': '1.1.0',
             'lifecycles': '1.1.1',
             'androidktx': '0.3',
-            'playServices': '15.0.1',
+            'playServices': '12.0.1',
+            'firebaseuiauth': '3.3.0',
             'gson': '2.8.2',
             'kotlin': '1.2.41',
             'dagger': '2.14.1',
@@ -47,7 +50,7 @@ buildscript {
         //noinspection GradleDependency
         classpath 'com.android.tools.build:gradle:3.2.0-alpha14'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}"
-        classpath 'com.google.gms:google-services:3.1.1'
+        classpath 'com.google.gms:google-services:3.2.1'
         classpath "com.google.gms:oss-licenses:0.9.2"
     }
 }
@@ -63,6 +66,8 @@ allprojects {
             eachDependency { details ->
                 if (details.requested.group == 'com.android.support') {
                     details.useVersion versions.supportLibrary
+                } else if (details.requested.group == 'com.google.firebase') {
+                    details.useVersion versions.playServices
                 }
             }
         }

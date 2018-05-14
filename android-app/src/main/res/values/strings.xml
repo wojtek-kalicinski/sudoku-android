@@ -25,4 +25,7 @@
     <string name="send_to">Send to</string>
     <string name="install_app">Install app</string>
     <string name="install">Install</string>
+    <string name="sign_in">Sign in</string>
+    <string name="sign_out">Sign out</string>
+    <string name="open_source">Open-source</string>
 </resources>
