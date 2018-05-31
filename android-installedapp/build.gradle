@@ -17,12 +17,22 @@
 
 apply plugin: 'com.android.application'
 
-
 // Create a variable called keystorePropertiesFile, and initialize it to your
 // keystore.properties file, in the rootProject folder.
 def keystorePropertiesFile = rootProject.file("keystore.properties")
 def keystoreProperties = new Properties()
-keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
+android.signingConfigs.maybeCreate("release")
+
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+    def signingConfig = android.signingConfigs.maybeCreate("release") {
+        it.storeFile file(keystoreProperties['storeFile'])
+        it.storePassword keystoreProperties['keyPassword']
+        it.keyAlias keystoreProperties['keyAlias']
+        it.keyPassword keystoreProperties['storePassword']
+    }
+}
 
 android {
     compileSdkVersion buildConfig.compileSdk
@@ -39,15 +49,6 @@ android {
 
     dataBinding {
         enabled true
-    }
-
-    signingConfigs {
-        release {
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
-            storeFile file(keystoreProperties['storeFile'])
-            storePassword keystoreProperties['storePassword']
-        }
     }
 
     buildTypes {
