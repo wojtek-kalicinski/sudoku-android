@@ -3,12 +3,11 @@ package me.kalicinski.sudoku.datasource
 import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
-import androidx.content.edit
+import androidx.core.content.edit
 import com.google.gson.*
 import me.kalicinski.sudoku.engine.IntBoard
 import me.kalicinski.sudoku.engine.SudokuBoard
 import me.kalicinski.sudoku.engine.SudokuGame
-import me.kalicinski.sudoku.engine.SudokuSolver
 import java.lang.reflect.Type
 import javax.inject.Inject
 

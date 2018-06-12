@@ -17,8 +17,8 @@
 
 package me.kalicinski.sudoku
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import me.kalicinski.sudoku.datasource.GenerateBoardSource
 import me.kalicinski.sudoku.datasource.LocalBoardSource
 import me.kalicinski.sudoku.engine.SudokuBoard

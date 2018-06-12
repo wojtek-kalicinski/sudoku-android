@@ -18,9 +18,9 @@
 package me.kalicinski.sudoku
 
 import android.annotation.SuppressLint
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
 import android.os.Handler
 import android.os.Message
 import me.kalicinski.sudoku.engine.SudokuBoard

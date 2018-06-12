@@ -44,7 +44,7 @@ android {
         versionName buildConfig.versionName
         minSdkVersion buildConfig.minSdk
         targetSdkVersion buildConfig.targetSdk
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     dataBinding {
@@ -80,6 +80,9 @@ android {
         }
     }
 
+    packagingOptions {
+        exclude "META-INF/**.kotlin_module"
+    }
 }
 
 dependencies {

@@ -48,7 +48,7 @@ android {
         versionName buildConfig.versionName
         minSdkVersion buildConfig.minSdk
         targetSdkVersion buildConfig.targetSdk
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "proguard.pro"
     }
 
@@ -82,6 +82,10 @@ android {
             matchingFallbacks = ['release']
         }
     }
+
+    packagingOptions {
+        exclude "META-INF/**.kotlin_module"
+    }
 }
 
 dependencies {
@@ -91,15 +95,15 @@ dependencies {
     implementation project(":libcanvas-android")
     implementation project(":libsudokurenderer-android")
 
-    api "com.android.support:appcompat-v7:${versions.supportLibrary}"
-    api "com.android.support.constraint:constraint-layout:${versions.constraintLayout}"
-    api "com.android.support:support-annotations:${versions.supportLibrary}"
-    api "com.android.support:appcompat-v7:${versions.supportLibrary}"
+    api "androidx.appcompat:appcompat:${versions.supportLibrary}"
+    api "androidx.constraintlayout:constraintlayout:${versions.constraintLayout}"
+    api "androidx.annotation:annotation:${versions.supportLibrary}"
+    api "androidx.appcompat:appcompat:${versions.supportLibrary}"
     implementation "com.google.android.instantapps:instantapps:${versions.instantApps}"
 
-    api "android.arch.lifecycle:extensions:${versions.lifecycles}"
+    api "androidx.lifecycle:lifecycle-extensions:${versions.lifecycles}"
 
-    implementation "androidx.core:core-ktx:${versions.androidktx}"
+    implementation "androidx.core:core-ktx:${versions.supportLibrary}"
 
     implementation "com.google.android.gms:play-services-oss-licenses:${versions.playServices}"
 
