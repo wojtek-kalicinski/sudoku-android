@@ -16,105 +16,24 @@
  */
 package me.kalicinski.sudoku
 
-import androidx.lifecycle.ViewModelProviders
 import android.content.Intent
-import androidx.databinding.DataBindingUtil
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import android.view.Menu
-import android.view.MenuItem
-import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
-import com.google.android.instantapps.InstantApps
+import androidx.navigation.fragment.NavHostFragment
 import dagger.android.AndroidInjection
-import me.kalicinski.sudoku.databinding.ActivityMainBinding
-import javax.inject.Inject
+import dagger.android.support.DaggerAppCompatActivity
 
 
-class MainActivity : AppCompatActivity() {
-
-    private lateinit var boardViewModel: BoardViewModel
-    @Inject lateinit var viewModelFactory: SudokuViewModelFactory
-
+class MainActivity : DaggerAppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
-        AndroidInjection.inject(this);
+        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
-
-        val seed = intent?.data?.lastPathSegment?.toLongOrNull()
-        intent = null
-
-        boardViewModel = ViewModelProviders.of(this, viewModelFactory).get(BoardViewModel::class.java)
-        if (seed == null) {
-            boardViewModel.initIfEmpty()
-        } else {
-            boardViewModel.generateNewBoard(true, seed)
-        }
-
-        with(DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)) {
-            setLifecycleOwner(this@MainActivity)
-            boardvm = boardViewModel
-            setSupportActionBar(toolbar)
-        }
-        supportActionBar?.setDisplayShowTitleEnabled(false)
+        setContentView(R.layout.activity_main)
     }
 
-    override fun onNewIntent(newIntent: Intent?) {
-        super.onNewIntent(newIntent)
-        val seed = newIntent?.data?.lastPathSegment?.toLongOrNull()
-        intent = null
-        if (seed != null) {
-            boardViewModel.generateNewBoard(true, seed)
-        }
-    }
-
-    override fun onStop() {
-        super.onStop()
-        boardViewModel.saveNow()
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        super.onCreateOptionsMenu(menu)
-        menuInflater.inflate(R.menu.main, menu)
-        if (InstantApps.isInstantApp(this)){
-            menuInflater.inflate(R.menu.instant, menu)
-        }
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId){
-            R.id.share -> {
-                with(Intent()) {
-                    setAction(Intent.ACTION_SEND)
-                    putExtra(
-                            Intent.EXTRA_TEXT,
-                            "https://sudokuplayground.firebaseapp.com/sudoku/${boardViewModel.game?.seed}"
-                    );
-                    setType("text/plain")
-                    startActivity(Intent.createChooser(this, getString(R.string.send_to)));
-                }
-                return true
-            }
-            R.id.get_app -> {
-                InstantApps.showInstallPrompt(
-                        this,
-                        Intent().apply {
-                            component = this@MainActivity.componentName
-                        },
-                        REQUEST_INSTALL,
-                        REFERRER
-                )
-                return true
-            }
-            R.id.oss_info -> {
-                startActivity(Intent(this, OssLicensesMenuActivity::class.java))
-                return true
-            }
-            else -> return false
-        }
-    }
-
-    companion object {
-        private val REFERRER = "Instant App"
-        private val REQUEST_INSTALL = 1
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        NavHostFragment
+                .findNavController(supportFragmentManager.findFragmentById(R.id.my_nav_host_fragment)!!)
+                .onHandleDeepLink(intent)
     }
 }

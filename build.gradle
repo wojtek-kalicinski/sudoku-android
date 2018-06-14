@@ -35,13 +35,17 @@ buildscript {
             'playServices': '11.8.0',
             'gson': '2.8.2',
             'kotlin': '1.2.41',
-            'dagger': '2.14.1',
+            'kotlinStdlib': '1.2.41',
+            'dagger': '2.16',
+            'navigation': '1.0.0-alpha2'
     ]
-
 
     repositories {
         google()
         jcenter()
+//        maven {
+//            url "https://dl.bintray.com/kotlin/kotlin-dev/"
+//        }
     }
     dependencies {
         //noinspection GradleDependency
@@ -49,6 +53,13 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}"
         classpath 'com.google.gms:google-services:3.1.1'
         classpath "com.google.gms:oss-licenses:0.9.1"
+        classpath files("/home/wkal/source/ub-supportlib-master/out/host" +
+                "/gradle/frameworks/support/navigation/navigation-safe-args-gradle-plugin/build" +
+                "/libs/navigation-safe-args-gradle-plugin-1.0.0-alpha02.jar",
+                "/home/wkal/source/ub-supportlib-master/out/host" +
+                        "/gradle/frameworks/support/navigation/navigation-safe-args-generator" +
+                        "/build/libs/navigation-safe-args-generator-1.0.0-alpha02.jar")
+        classpath "android.arch.navigation:navigation-safe-args-gradle-plugin:1.0.0-alpha02"
     }
 }
 
@@ -56,6 +67,9 @@ allprojects {
     repositories {
         google()
         jcenter()
+//        maven {
+//            url "https://dl.bintray.com/kotlin/kotlin-dev/"
+//        }
     }
 
     configurations.all {

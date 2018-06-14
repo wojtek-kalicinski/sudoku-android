@@ -42,33 +42,34 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <intent-filter android:autoVerify="true"
-                tools:targetApi="m">
-                <action android:name="android.intent.action.VIEW" />
+            <nav-graph android:value="@navigation/main_nav" />
+            <!--<intent-filter android:autoVerify="true"-->
+                <!--tools:targetApi="m">-->
+                <!--<action android:name="android.intent.action.VIEW" />-->
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
+                <!--<category android:name="android.intent.category.DEFAULT" />-->
+                <!--<category android:name="android.intent.category.BROWSABLE" />-->
 
-                <data
-                    android:scheme="http"/>
-                <data
-                    android:scheme="https"
-                    android:host="sudokuplayground.firebaseapp.com" />
-            </intent-filter>
+                <!--<data-->
+                    <!--android:scheme="http"/>-->
+                <!--<data-->
+                    <!--android:scheme="https"-->
+                    <!--android:host="sudokuplayground.firebaseapp.com" />-->
+            <!--</intent-filter>-->
 
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.VIEW" />-->
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
+                <!--<category android:name="android.intent.category.DEFAULT" />-->
+                <!--<category android:name="android.intent.category.BROWSABLE" />-->
 
-                <data
-                    android:scheme="http"/>
-                <data
-                    android:scheme="https"
-                    android:host="sudokuplayground.firebaseapp.com"
-                    android:pathPrefix="/sudoku/" />
-            </intent-filter>
+                <!--<data-->
+                    <!--android:scheme="http"/>-->
+                <!--<data-->
+                    <!--android:scheme="https"-->
+                    <!--android:host="sudokuplayground.firebaseapp.com"-->
+                    <!--android:pathPrefix="/sudoku/" />-->
+            <!--</intent-filter>-->
 
         </activity>
         <activity android:name="com.google.android.gms.oss.licenses.OssLicensesActivity"

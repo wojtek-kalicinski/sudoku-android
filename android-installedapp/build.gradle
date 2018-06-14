@@ -17,6 +17,7 @@
 
 apply plugin: 'com.android.application'
 
+
 // Create a variable called keystorePropertiesFile, and initialize it to your
 // keystore.properties file, in the rootProject folder.
 def keystorePropertiesFile = rootProject.file("keystore.properties")
@@ -31,6 +32,15 @@ if (keystorePropertiesFile.exists()) {
         it.storePassword keystoreProperties['keyPassword']
         it.keyAlias keystoreProperties['keyAlias']
         it.keyPassword keystoreProperties['storePassword']
+    }
+} else {
+    android.signingConfigs {
+        release {
+            storeFile android.signingConfigs.debug.storeFile
+            storePassword android.signingConfigs.debug.storePassword
+            keyAlias android.signingConfigs.debug.keyAlias
+            keyPassword android.signingConfigs.debug.keyPassword
+        }
     }
 }
 
