@@ -30,8 +30,8 @@ android {
 dependencies {
     expectedBy project(':libsudokurenderer-common')
     api project(':libcanvas-android')
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:${versions.kotlin}"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:${versions.kotlinStdlib}"
 
-//    testCompile "org.jetbrains.kotlin:kotlin-test:${versions.kotlin}"
-//    testCompile "org.jetbrains.kotlin:kotlin-test-junit:${versions.kotlin}"
+//    testCompile "org.jetbrains.kotlin:kotlin-test:${versions.kotlinStdlib}"
+//    testCompile "org.jetbrains.kotlin:kotlin-test-junit:${versions.kotlinStdlib}"
 }

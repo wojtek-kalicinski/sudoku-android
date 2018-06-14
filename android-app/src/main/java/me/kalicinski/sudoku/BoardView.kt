@@ -304,10 +304,12 @@ class BoardView @JvmOverloads constructor(
         }
 
         init {
-            stateListAnimator = AnimatorInflater.loadStateListAnimator(
-                    getContext(),
-                    R.animator.cellview_animator
-            )
+            if (!isInEditMode) {
+                stateListAnimator = AnimatorInflater.loadStateListAnimator(
+                        getContext(),
+                        R.animator.cellview_animator
+                )
+            }
 
             gestureDetector = object : GestureDetector(getContext(), gestureDetectorListener) {
                 override fun onTouchEvent(ev: MotionEvent): Boolean {

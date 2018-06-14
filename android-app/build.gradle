@@ -1,3 +1,5 @@
+import com.android.build.gradle.internal.variant.BaseVariantData
+
 /*
  * Copyright 2018 Google LLC
  *  
@@ -19,6 +21,7 @@ apply plugin: 'com.android.feature'
 //apply plugin: 'com.google.gms.oss.licenses.plugin'
 apply plugin: 'kotlin-platform-android'
 apply plugin: 'kotlin-kapt'
+apply plugin: "androidx.navigation.safeargs"
 
 // Create a variable called keystorePropertiesFile, and initialize it to your
 // keystore.properties file, in the rootProject folder.
@@ -35,6 +38,15 @@ if (keystorePropertiesFile.exists()) {
             keyPassword keystoreProperties['storePassword']
         }
 
+    }
+} else {
+    android.signingConfigs {
+        release {
+            storeFile android.signingConfigs.debug.storeFile
+            storePassword android.signingConfigs.debug.storePassword
+            keyAlias android.signingConfigs.debug.keyAlias
+            keyPassword android.signingConfigs.debug.keyPassword
+        }
     }
 }
 
@@ -89,6 +101,7 @@ android {
     }
 }
 
+
 dependencies {
     application project(':android-installedapp')
 
@@ -101,6 +114,9 @@ dependencies {
     api "androidx.annotation:annotation:${versions.supportLibrary}"
     api "androidx.appcompat:appcompat:${versions.supportLibrary}"
     implementation "com.google.android.instantapps:instantapps:${versions.instantApps}"
+
+    implementation "android.arch.navigation:navigation-fragment-ktx:${versions.navigation}"
+    implementation "android.arch.navigation:navigation-ui-ktx:${versions.navigation}"
 
     api "androidx.lifecycle:lifecycle-extensions:${versions.lifecycles}"
 

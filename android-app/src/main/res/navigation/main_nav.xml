@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_nav"
+    app:startDestination="@id/mainFragment">
+
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="me.kalicinski.sudoku.MainFragment"
+        android:label="MainFragment" >
+        <deepLink app:uri="https://sudokuplayground.firebaseapp.com/" android:autoVerify="true"/>
+        <deepLink app:uri="https://sudokuplayground.firebaseapp.com/sudoku/{seed}" android:autoVerify="true"/>
+        <argument
+            android:name="seed"
+            android:defaultValue="0L"
+            app:type="long"
+            />
+        <action
+            android:id="@+id/showOssScreen"
+            app:destination="@+id/ossActivity" />
+    </fragment>
+    <activity
+        android:id="@+id/ossActivity"
+        android:name="com.google.android.gms.oss.licenses.OssLicensesMenuActivity"
+        android:label="Open-source" />
+</navigation>

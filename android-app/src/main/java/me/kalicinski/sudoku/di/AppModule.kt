@@ -17,13 +17,9 @@
 
 package me.kalicinski.sudoku.di
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import android.content.Context
 import dagger.Module
 import dagger.Provides
-import me.kalicinski.sudoku.BoardRepository
-import me.kalicinski.sudoku.BoardViewModel
 import me.kalicinski.sudoku.SudokuApplication
 
 @Module
@@ -35,6 +31,5 @@ abstract class AppModule {
         internal fun providesContext(application: SudokuApplication): Context {
             return application.applicationContext
         }
-
     }
 }

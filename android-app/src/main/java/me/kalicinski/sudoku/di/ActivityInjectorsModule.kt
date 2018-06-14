@@ -20,11 +20,15 @@ package me.kalicinski.sudoku.di
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 import me.kalicinski.sudoku.MainActivity
+import me.kalicinski.sudoku.MainFragment
 
 @Module
 abstract class ActivityInjectorsModule {
 
     @ContributesAndroidInjector
     internal abstract fun contributeMainActivityInjector(): MainActivity
+
+    @ContributesAndroidInjector
+    internal abstract fun contributeMainFragmentInjector(): MainFragment
 
 }
