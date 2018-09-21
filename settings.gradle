@@ -15,7 +15,7 @@
  *  
  */
 
-include ':android-app', ':libsudoku-common', ':libsudoku-jvm', ':web-app', ':libsudoku-js', ':android-instantapp', ':android-installedapp'
+include ':android-app', ':libsudoku-common', ':libsudoku-jvm', ':web-app', ':libsudoku-js'
 project(':libsudoku-common').projectDir = file("libsudoku/libsudoku-common")
 project(':libsudoku-jvm').projectDir = file("libsudoku/libsudoku-jvm")
 project(':libsudoku-js').projectDir = file("libsudoku/libsudoku-js")

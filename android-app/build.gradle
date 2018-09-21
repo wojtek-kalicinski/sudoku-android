@@ -17,7 +17,7 @@ import com.android.build.gradle.internal.variant.BaseVariantData
  *  
  */
 
-apply plugin: 'com.android.feature'
+apply plugin: 'com.android.application'
 //apply plugin: 'com.google.gms.oss.licenses.plugin'
 apply plugin: 'kotlin-platform-android'
 apply plugin: 'kotlin-kapt'
@@ -51,8 +51,6 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    baseFeature true
-
     compileSdkVersion buildConfig.compileSdk
     buildToolsVersion versions.buildTools
 
@@ -62,7 +60,6 @@ android {
         minSdkVersion buildConfig.minSdk
         targetSdkVersion buildConfig.targetSdk
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles "proguard.pro"
     }
 
     dataBinding {
@@ -73,6 +70,7 @@ android {
         debugMini {
             initWith debug
             minifyEnabled true
+//            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), "proguard.pro"
             matchingFallbacks = ['debug']
         }
@@ -86,6 +84,7 @@ android {
         release {
             signingConfig signingConfigs.release
             minifyEnabled true
+//            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), "proguard.pro"
         }
 
@@ -99,12 +98,13 @@ android {
     packagingOptions {
         exclude "META-INF/**.kotlin_module"
     }
+//    dynamicFeatures = [":dynamic_feature"]
+
+
 }
 
 
 dependencies {
-    application project(':android-installedapp')
-
     implementation project(":libsudoku-jvm")
     implementation project(":libcanvas-android")
     implementation project(":libsudokurenderer-android")
@@ -112,7 +112,6 @@ dependencies {
     api "androidx.appcompat:appcompat:${versions.supportLibrary}"
     api "androidx.constraintlayout:constraintlayout:${versions.constraintLayout}"
     api "androidx.annotation:annotation:${versions.supportLibrary}"
-    api "androidx.appcompat:appcompat:${versions.supportLibrary}"
     implementation "com.google.android.instantapps:instantapps:${versions.instantApps}"
 
     implementation "android.arch.navigation:navigation-fragment-ktx:${versions.navigation}"

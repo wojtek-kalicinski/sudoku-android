@@ -13,7 +13,7 @@
         <argument
             android:name="seed"
             android:defaultValue="0L"
-            app:type="long"
+            app:argType="long"
             />
         <action
             android:id="@+id/showOssScreen"

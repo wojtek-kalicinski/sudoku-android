@@ -21,10 +21,10 @@ dependencies {
     compile project(":libsudokurenderer-js")
     compile project(":libsudoku-js")
     compile project(":libcanvas-js")
-    compile "org.jetbrains.kotlin:kotlin-stdlib-js:${versions.kotlinStdlib}"
+    compile "org.jetbrains.kotlin:kotlin-stdlib-js:${versions.kotlin}"
     compile "org.jetbrains.kotlinx:kotlinx-html-js:0.6.8"
-    testCompile "org.jetbrains.kotlin:kotlin-test:${versions.kotlinStdlib}"
-    testCompile "org.jetbrains.kotlin:kotlin-test-js:${versions.kotlinStdlib}"
+    testCompile "org.jetbrains.kotlin:kotlin-test:${versions.kotlin}"
+    testCompile "org.jetbrains.kotlin:kotlin-test-js:${versions.kotlin}"
 }
 
 

@@ -18,7 +18,7 @@
 apply plugin: 'kotlin-platform-common'
 
 dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib-common:${versions.kotlinStdlib}"
-    testCompile "org.jetbrains.kotlin:kotlin-test-common:${versions.kotlinStdlib}"
-    testCompile "org.jetbrains.kotlin:kotlin-test-annotations-common:${versions.kotlinStdlib}"
+    compile "org.jetbrains.kotlin:kotlin-stdlib-common:${versions.kotlin}"
+    testCompile "org.jetbrains.kotlin:kotlin-test-common:${versions.kotlin}"
+    testCompile "org.jetbrains.kotlin:kotlin-test-annotations-common:${versions.kotlin}"
 }

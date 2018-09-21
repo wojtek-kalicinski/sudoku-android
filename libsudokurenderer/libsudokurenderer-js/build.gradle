@@ -20,5 +20,5 @@ apply plugin: 'kotlin-platform-js'
 dependencies {
     expectedBy project(':libsudokurenderer-common')
     implementation project(":libcanvas-js")
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-js:${versions.kotlinStdlib}"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-js:${versions.kotlin}"
 }

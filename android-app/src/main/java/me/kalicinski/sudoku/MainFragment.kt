@@ -48,7 +48,7 @@ class MainFragment : Fragment() {
 
         arguments?.let { args ->
             if (args.get("seed") is String){ //workaround until navigation deep links support types
-                args.getString("seed").toLongOrNull()
+                args.getString("seed")!!.toLongOrNull()
             } else {
                 MainFragmentArgs.fromBundle(args)
                         .seed.takeUnless { it == 0L }
