@@ -21,4 +21,5 @@ dependencies {
     expectedBy project(':libsudoku-common')
     compile project(':prng-js')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-js:${versions.kotlin}"
+    testCompile "org.jetbrains.kotlin:kotlin-test-js:${versions.kotlin}"
 }
