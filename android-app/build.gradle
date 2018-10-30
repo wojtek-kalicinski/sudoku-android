@@ -37,7 +37,6 @@ if (keystorePropertiesFile.exists()) {
             keyAlias keystoreProperties['keyAlias']
             keyPassword keystoreProperties['storePassword']
         }
-
     }
 } else {
     android.signingConfigs {
@@ -64,6 +63,18 @@ android {
 
     dataBinding {
         enabled true
+    }
+
+    // Specifies one flavor dimension.
+    flavorDimensions "instant"
+    productFlavors {
+        instant {
+            dimension "instant"
+        }
+        installed {
+            dimension "instant"
+            versionCode buildConfig.version + 1
+        }
     }
 
     buildTypes {
@@ -105,9 +116,9 @@ android {
 
 
 dependencies {
-    implementation project(":libsudoku-jvm")
-    implementation project(":libcanvas-android")
-    implementation project(":libsudokurenderer-android")
+    implementation project(":libsudoku")
+    implementation project(":libcanvas")
+    implementation project(":libsudokurenderer")
 
     api "androidx.appcompat:appcompat:${versions.supportLibrary}"
     api "androidx.constraintlayout:constraintlayout:${versions.constraintLayout}"
@@ -129,6 +140,7 @@ dependencies {
     api "com.google.dagger:dagger-android-support:${versions.dagger}"
     kapt "com.google.dagger:dagger-compiler:${versions.dagger}"
     kapt "com.google.dagger:dagger-android-processor:${versions.dagger}"
+    implementation 'android.arch.navigation:navigation-fragment:1.0.0-alpha06'
 
 //    testImplementation 'junit:junit:4.12'
 //    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {

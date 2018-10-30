@@ -8,8 +8,8 @@
         android:id="@+id/mainFragment"
         android:name="me.kalicinski.sudoku.MainFragment"
         android:label="MainFragment" >
-        <deepLink app:uri="https://sudokuplayground.firebaseapp.com/" android:autoVerify="true"/>
-        <deepLink app:uri="https://sudokuplayground.firebaseapp.com/sudoku/{seed}" android:autoVerify="true"/>
+        <deepLink app:uri="sudokuplayground.firebaseapp.com/" android:autoVerify="true"/>
+        <deepLink app:uri="sudokuplayground.firebaseapp.com/sudoku/{seed}" android:autoVerify="true"/>
         <argument
             android:name="seed"
             android:defaultValue="0L"

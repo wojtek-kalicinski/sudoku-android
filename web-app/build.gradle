@@ -14,19 +14,33 @@
  * limitations under the License.
  *  
  */
-
-apply plugin: 'kotlin-platform-js'
-
-dependencies {
-    compile project(":libsudokurenderer-js")
-    compile project(":libsudoku-js")
-    compile project(":libcanvas-js")
-    compile "org.jetbrains.kotlin:kotlin-stdlib-js:${versions.kotlin}"
-    compile "org.jetbrains.kotlinx:kotlinx-html-js:0.6.8"
-    testCompile "org.jetbrains.kotlin:kotlin-test:${versions.kotlin}"
-    testCompile "org.jetbrains.kotlin:kotlin-test-js:${versions.kotlin}"
+plugins {
+    id 'org.jetbrains.kotlin.multiplatform'
 }
 
+kotlin {
+    targets {
+        fromPreset(presets.js, 'js')
+    }
+
+    sourceSets {
+        jsMain {
+            dependencies {
+                implementation project(":libsudokurenderer")
+                implementation project(":libsudoku")
+                implementation project(":libcanvas")
+                implementation project(":prng")
+                implementation "org.jetbrains.kotlinx:kotlinx-html-js:0.6.8"
+                implementation 'org.jetbrains.kotlin:kotlin-stdlib-js'
+            }
+        }
+        jsTest {
+            dependencies {
+                implementation "org.jetbrains.kotlin:kotlin-test-js"
+            }
+        }
+    }
+}
 
 task copyStatic(type: Sync) {
     from(files("${projectDir}/static"))
@@ -35,25 +49,25 @@ task copyStatic(type: Sync) {
 
 //extracts the resulting JS and puts it in the /web folder with all required dependencies
 //then you can open static/index.html and see your web app
-task assembleWeb(type: Sync) {
-    configurations.compile.each { File file ->
-        from(zipTree(file.absolutePath), {
-            includeEmptyDirs = false
-            include { fileTreeElement ->
-                def path = fileTreeElement.path
-                path.endsWith(".js") && (path.startsWith("META-INF/resources/") ||
-                        !path.startsWith("META-INF/"))
-            }
-        })
-    }
-    from compileKotlin2Js.destinationDir
-    into "${projectDir}/web/public"
-    preserve {
-        include '*.html'
-        include '.well-known/**'
-    }
-    dependsOn classes
-    dependsOn copyStatic
-}
-
-assemble.dependsOn assembleWeb
+//task assembleWeb(type: Sync) {
+//    configurations.compile.each { File file ->
+//        from(zipTree(file.absolutePath), {
+//            includeEmptyDirs = false
+//            include { fileTreeElement ->
+//                def path = fileTreeElement.path
+//                path.endsWith(".js") && (path.startsWith("META-INF/resources/") ||
+//                        !path.startsWith("META-INF/"))
+//            }
+//        })
+//    }
+//    from compileKotlin2Js.destinationDir
+//    into "${projectDir}/web/public"
+//    preserve {
+//        include '*.html'
+//        include '.well-known/**'
+//    }
+//    dependsOn classes
+//    dependsOn copyStatic
+//}
+//
+//assemble.dependsOn assembleWeb

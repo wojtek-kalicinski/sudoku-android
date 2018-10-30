@@ -1,0 +1,52 @@
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.multiplatform'
+}
+
+android {
+    compileSdkVersion buildConfig.compileSdk
+    buildToolsVersion versions.buildTools
+
+    defaultConfig {
+        minSdkVersion buildConfig.minSdk
+        targetSdkVersion buildConfig.targetSdk
+    }
+}
+
+dependencies {
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+    testImplementation 'org.jetbrains.kotlin:kotlin-test'
+    testImplementation 'org.jetbrains.kotlin:kotlin-test-junit'
+}
+
+kotlin {
+    targets {
+        fromPreset(presets.android, 'android')
+        fromPreset(presets.js, 'js')
+    }
+
+    sourceSets {
+        commonMain {
+            dependencies {
+                api project(':libcanvas')
+                implementation 'org.jetbrains.kotlin:kotlin-stdlib-common'
+            }
+        }
+        commonTest {
+            dependencies {
+                implementation "org.jetbrains.kotlin:kotlin-test-common"
+                implementation "org.jetbrains.kotlin:kotlin-test-annotations-common"
+            }
+        }
+        jsMain {
+            dependencies {
+                implementation 'org.jetbrains.kotlin:kotlin-stdlib-js'
+            }
+        }
+        jsTest {
+            dependencies {
+                implementation "org.jetbrains.kotlin:kotlin-test-js"
+            }
+        }
+    }
+}

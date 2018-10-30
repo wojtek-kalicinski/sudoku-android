@@ -15,23 +15,12 @@
  *  
  */
 
-include ':android-app', ':libsudoku-common', ':libsudoku-jvm', ':web-app', ':libsudoku-js'
-project(':libsudoku-common').projectDir = file("libsudoku/libsudoku-common")
-project(':libsudoku-jvm').projectDir = file("libsudoku/libsudoku-jvm")
-project(':libsudoku-js').projectDir = file("libsudoku/libsudoku-js")
+include ':android-app', ':web-app'
 
-include ':prng-common', ':prng-js', ':prng-jvm'
-project(':prng-common').projectDir = file("third_party/prng/prng-common")
-project(':prng-jvm').projectDir = file("third_party/prng/prng-jvm")
-project(':prng-js').projectDir = file("third_party/prng/prng-js")
+include ':libsudoku'
+include ':libsudokurenderer'
 
-include ':libcanvas-common', ':libcanvas-js', ':libcanvas-android'
-project(':libcanvas-common').projectDir = file("libcanvas/libcanvas-common")
-project(':libcanvas-android').projectDir = file("libcanvas/libcanvas-android")
-project(':libcanvas-js').projectDir = file("libcanvas/libcanvas-js")
+include ':libcanvas'
 
-
-include ':libsudokurenderer-common', ':libsudokurenderer-android', ':libsudokurenderer-js'
-project(':libsudokurenderer-common').projectDir = file("libsudokurenderer/libsudokurenderer-common")
-project(':libsudokurenderer-android').projectDir = file("libsudokurenderer/libsudokurenderer-android")
-project(':libsudokurenderer-js').projectDir = file("libsudokurenderer/libsudokurenderer-js")
+include ':prng'
+project(':prng').projectDir = file("third_party/prng")
