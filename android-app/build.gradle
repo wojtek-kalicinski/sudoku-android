@@ -19,7 +19,7 @@ import com.android.build.gradle.internal.variant.BaseVariantData
 
 apply plugin: 'com.android.application'
 //apply plugin: 'com.google.gms.oss.licenses.plugin'
-apply plugin: 'kotlin-platform-android'
+apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: "androidx.navigation.safeargs"
 
@@ -122,7 +122,7 @@ dependencies {
 
     api "androidx.appcompat:appcompat:${versions.supportLibrary}"
     api "androidx.constraintlayout:constraintlayout:${versions.constraintLayout}"
-    api "androidx.annotation:annotation:${versions.supportLibrary}"
+    api "androidx.annotation:annotation:${versions.supportAnnotations}"
     implementation "com.google.android.instantapps:instantapps:${versions.instantApps}"
 
     implementation "android.arch.navigation:navigation-fragment-ktx:${versions.navigation}"
@@ -130,7 +130,7 @@ dependencies {
 
     api "androidx.lifecycle:lifecycle-extensions:${versions.lifecycles}"
 
-    implementation "androidx.core:core-ktx:${versions.supportLibrary}"
+    implementation "androidx.core:core-ktx:${versions.coreKtx}"
 
     implementation "com.google.android.gms:play-services-oss-licenses:${versions.playServices}"
 
@@ -140,7 +140,6 @@ dependencies {
     api "com.google.dagger:dagger-android-support:${versions.dagger}"
     kapt "com.google.dagger:dagger-compiler:${versions.dagger}"
     kapt "com.google.dagger:dagger-android-processor:${versions.dagger}"
-    implementation 'android.arch.navigation:navigation-fragment:1.0.0-alpha06'
 
 //    testImplementation 'junit:junit:4.12'
 //    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
