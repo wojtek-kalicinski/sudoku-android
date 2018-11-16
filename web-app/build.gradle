@@ -29,7 +29,6 @@ kotlin {
                 implementation project(":libsudokurenderer")
                 implementation project(":libsudoku")
                 implementation project(":libcanvas")
-                implementation project(":prng")
                 implementation "org.jetbrains.kotlinx:kotlinx-html-js:0.6.8"
                 implementation 'org.jetbrains.kotlin:kotlin-stdlib-js'
             }

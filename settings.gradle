@@ -21,6 +21,3 @@ include ':libsudoku'
 include ':libsudokurenderer'
 
 include ':libcanvas'
-
-include ':prng'
-project(':prng').projectDir = file("third_party/prng")

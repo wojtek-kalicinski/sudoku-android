@@ -23,7 +23,6 @@ import me.kalicinski.sudoku.datasource.GenerateBoardSource
 import me.kalicinski.sudoku.datasource.LocalBoardSource
 import me.kalicinski.sudoku.engine.SudokuBoard
 import me.kalicinski.sudoku.engine.SudokuGame
-import org.uncommons.maths.random.MersenneTwisterRNG
 import java.util.concurrent.Executors
 import javax.inject.Inject
 import javax.inject.Singleton

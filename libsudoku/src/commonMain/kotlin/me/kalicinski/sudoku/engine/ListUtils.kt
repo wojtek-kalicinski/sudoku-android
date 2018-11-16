@@ -1,8 +1,8 @@
 package me.kalicinski.sudoku.engine
 
-import org.uncommons.maths.random.MersenneTwisterRNG
+import kotlin.random.Random
 
-fun <T> MutableList<T>.shuffle(random: MersenneTwisterRNG): MutableList<T> {
+fun <T> MutableList<T>.shuffle(random: Random): MutableList<T> {
     if (this is RandomAccess){
         var tmpObject: T
         var rndIndex: Int

@@ -17,11 +17,11 @@
 
 package me.kalicinski.sudoku.engine
 
-import org.uncommons.maths.random.MersenneTwisterRNG
+import kotlin.random.Random
 
 class SudokuSolver(
         private val solvers: Array<SudokuBoard.(Int, Boolean) -> SolverResult>,
-        private val random: MersenneTwisterRNG? = null
+        private val random: Random? = null
 ) {
 
     fun solve(
@@ -138,7 +138,7 @@ class SudokuSolver(
 
         fun generate(
                 listener: SolverListener? = null,
-                random: MersenneTwisterRNG? = null
+                random: Random? = null
         ): Pair<SudokuBoard, SudokuBoard> {
             val solver = SudokuSolver(defaultSolvers, random)
             val emptyBoard = IntBoard.fromArray(IntArray(SudokuBoard.BOARD_SIZE))

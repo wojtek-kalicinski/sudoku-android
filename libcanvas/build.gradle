@@ -28,24 +28,23 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation project(":prng")
-                implementation 'org.jetbrains.kotlin:kotlin-stdlib-common'
+                implementation "org.jetbrains.kotlin:kotlin-stdlib-common:${versions.kotlin}"
             }
         }
         commonTest {
             dependencies {
-                implementation "org.jetbrains.kotlin:kotlin-test-common"
-                implementation "org.jetbrains.kotlin:kotlin-test-annotations-common"
+                implementation "org.jetbrains.kotlin:kotlin-test-common:${versions.kotlin}"
+                implementation "org.jetbrains.kotlin:kotlin-test-annotations-common:${versions.kotlin}"
             }
         }
         jsMain {
             dependencies {
-                implementation 'org.jetbrains.kotlin:kotlin-stdlib-js'
+                implementation "org.jetbrains.kotlin:kotlin-stdlib-js:${versions.kotlin}"
             }
         }
         jsTest {
             dependencies {
-                implementation "org.jetbrains.kotlin:kotlin-test-js"
+                implementation "org.jetbrains.kotlin:kotlin-test-js:${versions.kotlin}"
             }
         }
     }

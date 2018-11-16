@@ -14,9 +14,9 @@ android {
 }
 
 dependencies {
-    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
-    testImplementation 'org.jetbrains.kotlin:kotlin-test'
-    testImplementation 'org.jetbrains.kotlin:kotlin-test-junit'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${versions.kotlin}"
+    testImplementation "org.jetbrains.kotlin:kotlin-test:${versions.kotlin}"
+    testImplementation "org.jetbrains.kotlin:kotlin-test-junit:${versions.kotlin}"
 }
 
 kotlin {
@@ -29,23 +29,23 @@ kotlin {
         commonMain {
             dependencies {
                 api project(':libcanvas')
-                implementation 'org.jetbrains.kotlin:kotlin-stdlib-common'
+                implementation "org.jetbrains.kotlin:kotlin-stdlib-common:${versions.kotlin}"
             }
         }
         commonTest {
             dependencies {
-                implementation "org.jetbrains.kotlin:kotlin-test-common"
-                implementation "org.jetbrains.kotlin:kotlin-test-annotations-common"
+                implementation "org.jetbrains.kotlin:kotlin-test-common:${versions.kotlin}"
+                implementation "org.jetbrains.kotlin:kotlin-test-annotations-common:${versions.kotlin}"
             }
         }
         jsMain {
             dependencies {
-                implementation 'org.jetbrains.kotlin:kotlin-stdlib-js'
+                implementation "org.jetbrains.kotlin:kotlin-stdlib-js:${versions.kotlin}"
             }
         }
         jsTest {
             dependencies {
-                implementation "org.jetbrains.kotlin:kotlin-test-js"
+                implementation "org.jetbrains.kotlin:kotlin-test-js:${versions.kotlin}"
             }
         }
     }
