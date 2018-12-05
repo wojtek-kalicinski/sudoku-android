@@ -41,7 +41,7 @@ Some tech you can find inside:
  
 ## Development setup
 
-You require the latest Android Studio 3.1 (or newer) to be able to build the app.
+You require the latest Android Studio 3.4 (or newer) to be able to build the app.
 
 ## Contributions
 
