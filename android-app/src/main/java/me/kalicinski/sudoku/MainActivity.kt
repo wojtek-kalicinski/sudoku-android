@@ -34,6 +34,6 @@ class MainActivity : DaggerAppCompatActivity(){
         super.onNewIntent(intent)
         NavHostFragment
                 .findNavController(supportFragmentManager.findFragmentById(R.id.my_nav_host_fragment)!!)
-                .onHandleDeepLink(intent)
+                .handleDeepLink(intent)
     }
 }
