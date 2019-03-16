@@ -23,12 +23,23 @@ kotlin {
     targets {
         fromPreset(presets.android, 'android')
         fromPreset(presets.js, 'js')
+
+        fromPreset(determineIosPreset(), 'ios') {
+            binaries {
+                framework("libsudokurenderer") {
+                    export project(":libcanvas")
+                    export project(":libsudoku")
+                    transitiveExport = true
+                }
+            }
+        }
     }
 
     sourceSets {
         commonMain {
             dependencies {
                 api project(':libcanvas')
+                api project(':libsudoku')
                 implementation "org.jetbrains.kotlin:kotlin-stdlib-common:${versions.kotlin}"
             }
         }
@@ -50,3 +61,31 @@ kotlin {
         }
     }
 }
+
+// If custom preset specified in 'sudoku.preset.name' property, then use it for building.
+// Otherwise build for iPhone simulator (by default).
+def determineIosPreset() {
+    String presetName = project.hasProperty('sudoku.preset.name') ? project.properties['sudoku.preset.name'] : 'iosX64'
+    def preset = project.kotlin.presets[presetName]
+    println("$project has been configured for $presetName platform.")
+    preset
+}
+task packForXCode(type: Sync) {
+    final File frameworkDir = new File(buildDir, "xcode-frameworks")
+    final String mode = project.findProperty("XCODE_CONFIGURATION")?.toUpperCase() ?: 'DEBUG'
+    final def framework = kotlin.targets.ios.binaries.getFramework("libsudokurenderer", mode)
+
+    inputs.property "mode", mode
+    dependsOn framework.linkTask
+
+    from { framework.outputFile.parentFile }
+    into frameworkDir
+
+    doLast {
+        new File(frameworkDir, 'gradlew').with {
+            text = "#!/bin/bash\nexport 'JAVA_HOME=${System.getProperty("java.home")}'\ncd '${rootProject.rootDir}'\n./gradlew \$@\n"
+            setExecutable(true)
+        }
+    }
+}
+tasks.build.dependsOn packForXCode

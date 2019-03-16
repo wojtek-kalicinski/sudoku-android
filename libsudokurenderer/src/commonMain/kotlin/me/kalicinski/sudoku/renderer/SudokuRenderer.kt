@@ -50,7 +50,7 @@ fun drawCell(
         bigNumberHeight: Float,
         smallNumberHeight: Float
 ){
-    multiCanvas.textAlign = "center"
+    multiCanvas.textAlign = "left"
     if (isFocused) {
         multiCanvas.color = colorFocused
         multiCanvas.fillRect(0f, 0f, width, height)
@@ -70,14 +70,20 @@ fun drawCell(
         multiCanvas.textSize = bigNumberHeight
         val bigNumber = numbersShowing.iterator().next().toString()
         multiCanvas.measureText(bigNumber, textBounds)
+
         val verticalShift: Float = if (textBounds.height() != 0){
             -textBounds.bottom + textBounds.height() / 2.0f
         } else {
             multiCanvas.textSize / 3
         }
+
+        val horizontalShift: Float = if (textBounds.width() != 0){
+            -textBounds.left + textBounds.width() / 2.0f
+        } else 0f
+
         multiCanvas.drawText(
                 bigNumber,
-                width / 2f,
+                width / 2f - horizontalShift,
                 height / 2f + verticalShift
         )
     } else {
@@ -104,9 +110,14 @@ fun drawCell(
             } else {
                 multiCanvas.textSize / 3
             }
+
+            val horizontalShift: Float = if (textBounds.width() != 0){
+                -textBounds.left + textBounds.width() / 2.0f
+            } else 0f
+
             multiCanvas.drawText(
                     i.toString(),
-                    x * width / 3f + width / 6f,
+                    x * width / 3f + width / 6f - horizontalShift,
                     y * height / 3f + verticalShift + height / 6f
             )
         }

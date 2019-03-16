@@ -23,6 +23,7 @@ kotlin {
     targets {
         fromPreset(presets.android, 'android')
         fromPreset(presets.js, 'js')
+        fromPreset(determineIosPreset(), 'ios')
     }
 
     sourceSets {
@@ -48,4 +49,13 @@ kotlin {
             }
         }
     }
+}
+
+// If custom preset specified in 'sudoku.preset.name' property, then use it for building.
+// Otherwise build for iPhone simulator (by default).
+def determineIosPreset() {
+    String presetName = project.hasProperty('sudoku.preset.name') ? project.properties['sudoku.preset.name'] : 'iosX64'
+    def preset = project.kotlin.presets[presetName]
+    println("$project has been configured for $presetName platform.")
+    preset
 }
