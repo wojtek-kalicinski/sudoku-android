@@ -126,6 +126,7 @@ dependencies {
     implementation project(":libsudoku")
     implementation project(":libcanvas")
     implementation project(":libsudokurenderer")
+    implementation project(":libstorage")
 
     api "androidx.appcompat:appcompat:${versions.supportLibrary}"
     api "androidx.constraintlayout:constraintlayout:${versions.constraintLayout}"

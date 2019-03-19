@@ -2,7 +2,6 @@ plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.multiplatform'
 }
-apply plugin: 'kotlinx-serialization'
 
 android {
     compileSdkVersion buildConfig.compileSdk
@@ -15,34 +14,21 @@ android {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${versions.kotlin}"
-    testImplementation "org.jetbrains.kotlin:kotlin-test:${versions.kotlin}"
-    testImplementation "org.jetbrains.kotlin:kotlin-test-junit:${versions.kotlin}"
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+    testImplementation 'org.jetbrains.kotlin:kotlin-test'
+    testImplementation 'org.jetbrains.kotlin:kotlin-test-junit'
 }
 
 kotlin {
     targets {
         fromPreset(presets.android, 'android')
         fromPreset(presets.js, 'js')
-
-        fromPreset(determineIosPreset(), 'ios') {
-            binaries {
-                framework("libsudokurenderer") {
-                    export project(":libcanvas")
-                    export project(":libsudoku")
-                    export project(":libstorage")
-                }
-            }
-        }
+        fromPreset(determineIosPreset(), 'ios')
     }
 
     sourceSets {
         commonMain {
             dependencies {
-                api project(':libcanvas')
-                api project(':libsudoku')
-                api project(':libstorage')
-
                 implementation "org.jetbrains.kotlin:kotlin-stdlib-common:${versions.kotlin}"
             }
         }
@@ -73,22 +59,3 @@ def determineIosPreset() {
     println("$project has been configured for $presetName platform.")
     preset
 }
-task packForXCode(type: Sync) {
-    final File frameworkDir = new File(buildDir, "xcode-frameworks")
-    final String mode = project.findProperty("XCODE_CONFIGURATION")?.toUpperCase() ?: 'DEBUG'
-    final def framework = kotlin.targets.ios.binaries.getFramework("libsudokurenderer", mode)
-
-    inputs.property "mode", mode
-    dependsOn framework.linkTask
-
-    from { framework.outputFile.parentFile }
-    into frameworkDir
-
-    doLast {
-        new File(frameworkDir, 'gradlew').with {
-            text = "#!/bin/bash\nexport 'JAVA_HOME=${System.getProperty("java.home")}'\ncd '${rootProject.rootDir}'\n./gradlew \$@\n"
-            setExecutable(true)
-        }
-    }
-}
-tasks.build.dependsOn packForXCode

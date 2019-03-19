@@ -23,6 +23,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import android.os.Handler
 import android.os.Message
+import me.kalicinski.sudoku.engine.IntBoard
 import me.kalicinski.sudoku.engine.SudokuBoard
 import me.kalicinski.sudoku.engine.SudokuGame
 import javax.inject.Inject
@@ -52,7 +53,7 @@ class BoardViewModel @Inject constructor(val repository: BoardRepository) : View
     init {
         board.observeForever {
             if (it != null) {
-                game?.board = it
+                game?.board = it as IntBoard
                 handler.removeMessages(MSG_SAVE)
                 val msg = handler.obtainMessage(MSG_SAVE, game)
                 handler.sendMessageDelayed(msg, (1000 * 10).toLong())
@@ -63,7 +64,7 @@ class BoardViewModel @Inject constructor(val repository: BoardRepository) : View
     fun saveNow() {
         board.value?.let {
             handler.removeMessages(MSG_SAVE)
-            game?.board = it
+            game?.board = it as IntBoard
             repository.saveBoard(game)
         }
     }

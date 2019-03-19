@@ -1,6 +1,8 @@
 package me.kalicinski.sudoku.engine
 
-abstract class SudokuBoard {
+import kotlinx.serialization.Serializable
+
+interface   SudokuBoard {
 
     open fun toArray(): IntArray {
         val board = IntArray(BOARD_SIZE)

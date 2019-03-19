@@ -17,9 +17,12 @@
 
 package me.kalicinski.sudoku.engine
 
-data class SudokuGame(var board: SudokuBoard, val seed: Long) {
+import kotlinx.serialization.Serializable
 
-    lateinit var solvedBoard: SudokuBoard
+@Serializable
+data class SudokuGame(var board: IntBoard, val seed: Long) {
+
+    lateinit var solvedBoard: IntBoard
 
     fun calculateSolution() {
             val startingBoard = board.copy()
@@ -32,7 +35,7 @@ data class SudokuGame(var board: SudokuBoard, val seed: Long) {
             }
             val solutions = SudokuSolver(SudokuSolver.defaultSolvers).solve(startingBoard)
             if (solutions.isNotEmpty()) {
-                solvedBoard = solutions[0]
+                solvedBoard = solutions[0] as IntBoard
         }
     }
 }

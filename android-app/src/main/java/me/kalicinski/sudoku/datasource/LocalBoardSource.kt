@@ -1,10 +1,11 @@
 package me.kalicinski.sudoku.datasource
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.preference.PreferenceManager
-import androidx.core.content.edit
 import com.google.gson.*
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.stringify
+import me.kalicinski.multiplatform.MultiStorage
 import me.kalicinski.sudoku.engine.IntBoard
 import me.kalicinski.sudoku.engine.SudokuBoard
 import me.kalicinski.sudoku.engine.SudokuGame
@@ -30,28 +31,29 @@ class LocalBoardSource @Inject constructor(context: Context) {
 
     }.create()
 
-    private val sharedPreferences: SharedPreferences by lazy {
-        PreferenceManager.getDefaultSharedPreferences(appContext)
+    private val storage: MultiStorage by lazy {
+        MultiStorage(PreferenceManager.getDefaultSharedPreferences(appContext))
     }
 
     var game: SudokuGame?
         get() {
-            return sharedPreferences.getString(PREF_BOARD, null)?.let {
-                println(it)
+            return storage.getString(PREF_BOARD)?.let {
+                println("read from storage: $it")
                 val loadedBoard = gson.fromJson(it, SudokuGame::class.java)
                 loadedBoard.calculateSolution()
                 return loadedBoard
             }
         }
         set(value) {
-            sharedPreferences.edit {
+            storage.run {
                 if (value != null) {
                     putString(
                             PREF_BOARD,
                             gson.toJson(value)
                     )
+                    println("kotlinx.serialized:" + Json.stringify(SudokuGame.serializer(), value))
                 } else {
-                    remove(PREF_BOARD)
+                    putString(PREF_BOARD, null)
                 }
             }
         }

@@ -1,5 +1,6 @@
 package me.kalicinski.sudoku.datasource
 
+import me.kalicinski.sudoku.engine.IntBoard
 import me.kalicinski.sudoku.engine.SudokuGame
 import me.kalicinski.sudoku.engine.SudokuSolver
 import javax.inject.Inject
@@ -10,8 +11,8 @@ import kotlin.random.Random
 class GenerateBoardSource @Inject constructor() {
     fun generateBoard(seed: Long): SudokuGame {
         val pair = SudokuSolver.generate(random = Random(seed))
-        return SudokuGame(pair.first, seed).apply {
-            solvedBoard = pair.second
+        return SudokuGame(pair.first as IntBoard, seed).apply {
+            solvedBoard = pair.second as IntBoard
         }
     }
 }

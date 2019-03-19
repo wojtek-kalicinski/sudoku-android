@@ -17,9 +17,21 @@
 
 package me.kalicinski.sudoku.engine
 
-class IntBoard(initGrid: IntArray = IntArray(BOARD_SIZE)) : SudokuBoard() {
+import kotlinx.serialization.*
+import me.kalicinski.sudoku.engine.SudokuBoard.Companion.BOARD_SIZE
 
-    val grid = initGrid.copyOf()
+@Serializable
+class IntBoard() : SudokuBoard {
+
+    val grid = MutableList<Int>(BOARD_SIZE) { 0 }
+
+    constructor(initGrid: IntArray) : this(){
+        initGrid.forEachIndexed { index, i ->
+            grid[index] = i
+        }
+    }
+
+    constructor(initGrid: List<Int>) : this(initGrid.toIntArray())
 
     override fun clearValues(pos: Int) {
         grid[pos] = 0
@@ -149,7 +161,7 @@ class IntBoard(initGrid: IntArray = IntArray(BOARD_SIZE)) : SudokuBoard() {
     }
 
     override fun toArray(): IntArray {
-        return grid.copyOf()
+        return grid.toIntArray()
     }
 
     companion object {

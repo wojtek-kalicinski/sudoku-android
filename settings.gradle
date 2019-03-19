@@ -20,4 +20,7 @@ include ':android-app', ':web-app'
 include ':libsudoku'
 include ':libsudokurenderer'
 
+include ':libstorage'
 include ':libcanvas'
+
+enableFeaturePreview('GRADLE_METADATA')
