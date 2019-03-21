@@ -16,7 +16,7 @@
  */
 
 import UIKit
-import libsudokurenderer
+import libsudoku
 
 class BoardView: UIView {
     
@@ -68,7 +68,7 @@ class BoardView: UIView {
         
     override func draw(_ rect: CGRect) {
         canvas.grabContext()
-        SudokuRendererKt.drawBoard(multiCanvas: canvas, width: Float(bounds.width), height: Float(bounds.height), strokeWidthBold: 2, strokeWidthNormal: 1, colorBold: Int32(bitPattern: 0xFFFF0000), colorNormal: Int32(bitPattern: 0xFF0000FF))
+        SudokuRendererKt.drawBoard(multiCanvas: canvas, width: Float(bounds.width), height: Float(bounds.height), strokeWidthBold: 2, strokeWidthNormal: 1, colorBold: Int32(bitPattern: 0xFF212121), colorNormal: Int32(bitPattern: 0xFF757575))
     }
     
     func setBoard(board: SudokuBoard?) {

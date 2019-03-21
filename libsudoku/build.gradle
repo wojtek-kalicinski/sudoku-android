@@ -1,21 +1,48 @@
 plugins {
+    id 'com.android.library'
     id 'org.jetbrains.kotlin.multiplatform'
 }
 apply plugin: 'kotlinx-serialization'
 
+android {
+    compileSdkVersion buildConfig.compileSdk
+    buildToolsVersion versions.buildTools
+
+    defaultConfig {
+        minSdkVersion buildConfig.minSdk
+        targetSdkVersion buildConfig.targetSdk
+    }
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${versions.kotlin}"
+    testImplementation "org.jetbrains.kotlin:kotlin-test:${versions.kotlin}"
+    testImplementation "org.jetbrains.kotlin:kotlin-test-junit:${versions.kotlin}"
+}
 
 kotlin {
     targets {
-        fromPreset(presets.jvm, 'jvm')
+        fromPreset(presets.android, 'android')
         fromPreset(presets.js, 'js')
 
-        fromPreset(determineIosPreset(), 'ios')
+        fromPreset(determineIosPreset(), 'ios') {
+            binaries {
+                framework("libsudoku") {
+                    export project(":libcanvas")
+                    export project(":libsudokusolver")
+                    export project(":libstorage")
+                }
+            }
+        }
     }
 
     sourceSets {
         commonMain {
             dependencies {
-                api "org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.10.0"
+                api project(':libcanvas')
+                api project(':libsudokusolver')
+                api project(':libstorage')
+
                 implementation "org.jetbrains.kotlin:kotlin-stdlib-common:${versions.kotlin}"
             }
         }
@@ -23,17 +50,6 @@ kotlin {
             dependencies {
                 implementation "org.jetbrains.kotlin:kotlin-test-common:${versions.kotlin}"
                 implementation "org.jetbrains.kotlin:kotlin-test-annotations-common:${versions.kotlin}"
-            }
-        }
-        jvmMain {
-            dependencies {
-                implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${versions.kotlin}"
-            }
-        }
-        jvmTest {
-            dependencies {
-                implementation "org.jetbrains.kotlin:kotlin-test:${versions.kotlin}"
-                implementation "org.jetbrains.kotlin:kotlin-test-junit:${versions.kotlin}"
             }
         }
         jsMain {
@@ -46,17 +62,7 @@ kotlin {
                 implementation "org.jetbrains.kotlin:kotlin-test-js:${versions.kotlin}"
             }
         }
-        iosMain {
-            dependencies {
-                api "org.jetbrains.kotlinx:kotlinx-serialization-runtime-native:0.10.0"
-            }
-        }
     }
-}
-
-
-configurations {
-    compileClasspath
 }
 
 // If custom preset specified in 'sudoku.preset.name' property, then use it for building.
@@ -67,3 +73,22 @@ def determineIosPreset() {
     println("$project has been configured for $presetName platform.")
     preset
 }
+task packForXCode(type: Sync) {
+    final File frameworkDir = new File(buildDir, "xcode-frameworks")
+    final String mode = project.findProperty("XCODE_CONFIGURATION")?.toUpperCase() ?: 'DEBUG'
+    final def framework = kotlin.targets.ios.binaries.getFramework("libsudoku", mode)
+
+    inputs.property "mode", mode
+    dependsOn framework.linkTask
+
+    from { framework.outputFile.parentFile }
+    into frameworkDir
+
+    doLast {
+        new File(frameworkDir, 'gradlew').with {
+            text = "#!/bin/bash\nexport 'JAVA_HOME=${System.getProperty("java.home")}'\ncd '${rootProject.rootDir}'\n./gradlew \$@\n"
+            setExecutable(true)
+        }
+    }
+}
+tasks.build.dependsOn packForXCode

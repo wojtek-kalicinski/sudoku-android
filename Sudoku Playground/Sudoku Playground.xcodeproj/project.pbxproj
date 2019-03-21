@@ -7,10 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D20F7D00223BB74E009F3A55 /* libsudokurenderer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D20F7CFF223BB74E009F3A55 /* libsudokurenderer.framework */; };
-		D20F7D01223BB74E009F3A55 /* libsudokurenderer.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D20F7CFF223BB74E009F3A55 /* libsudokurenderer.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D20F7D08223BBDB4009F3A55 /* BoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20F7D07223BBDB4009F3A55 /* BoardView.swift */; };
 		D20F7D0A223BFAAD009F3A55 /* CellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20F7D09223BFAAD009F3A55 /* CellView.swift */; };
+		D20F7D0C2243A94B009F3A55 /* libsudoku.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D20F7D0B2243A94B009F3A55 /* libsudoku.framework */; };
+		D20F7D0D2243A94B009F3A55 /* libsudoku.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D20F7D0B2243A94B009F3A55 /* libsudoku.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D2CEE85B21FF4A3500E43EE9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2CEE85A21FF4A3500E43EE9 /* AppDelegate.swift */; };
 		D2CEE85D21FF4A3500E43EE9 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2CEE85C21FF4A3500E43EE9 /* ViewController.swift */; };
 		D2CEE86021FF4A3500E43EE9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D2CEE85E21FF4A3500E43EE9 /* Main.storyboard */; };
@@ -19,13 +19,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		D20F7CFD223A80C5009F3A55 /* Embed Frameworks */ = {
+		D20F7D0E2243A94B009F3A55 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				D20F7D01223BB74E009F3A55 /* libsudokurenderer.framework in Embed Frameworks */,
+				D20F7D0D2243A94B009F3A55 /* libsudoku.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -33,9 +33,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		D20F7CFF223BB74E009F3A55 /* libsudokurenderer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = libsudokurenderer.framework; path = "../libsudokurenderer/build/xcode-frameworks/libsudokurenderer.framework"; sourceTree = "<group>"; };
 		D20F7D07223BBDB4009F3A55 /* BoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardView.swift; sourceTree = "<group>"; };
 		D20F7D09223BFAAD009F3A55 /* CellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellView.swift; sourceTree = "<group>"; };
+		D20F7D0B2243A94B009F3A55 /* libsudoku.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = libsudoku.framework; path = "../libsudoku/build/xcode-frameworks/libsudoku.framework"; sourceTree = "<group>"; };
 		D2CEE85721FF4A3500E43EE9 /* Sudoku Playground.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Sudoku Playground.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D2CEE85A21FF4A3500E43EE9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D2CEE85C21FF4A3500E43EE9 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -50,7 +50,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D20F7D00223BB74E009F3A55 /* libsudokurenderer.framework in Frameworks */,
+				D20F7D0C2243A94B009F3A55 /* libsudoku.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -60,7 +60,7 @@
 		D2CEE84E21FF4A3500E43EE9 = {
 			isa = PBXGroup;
 			children = (
-				D20F7CFF223BB74E009F3A55 /* libsudokurenderer.framework */,
+				D20F7D0B2243A94B009F3A55 /* libsudoku.framework */,
 				D2CEE85921FF4A3500E43EE9 /* Sudoku Playground */,
 				D2CEE85821FF4A3500E43EE9 /* Products */,
 			);
@@ -100,7 +100,7 @@
 				D2CEE85321FF4A3500E43EE9 /* Sources */,
 				D2CEE85421FF4A3500E43EE9 /* Frameworks */,
 				D2CEE85521FF4A3500E43EE9 /* Resources */,
-				D20F7CFD223A80C5009F3A55 /* Embed Frameworks */,
+				D20F7D0E2243A94B009F3A55 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -173,7 +173,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd \"$SRCROOT/../libsudokurenderer/build/xcode-frameworks\"\n./gradlew :libsudokurenderer:packForXCode -PXCODE_CONFIGURATION=${CONFIGURATION}\n";
+			shellScript = "cd \"$SRCROOT/../libsudoku/build/xcode-frameworks\"\n./gradlew :libsudoku:packForXCode -PXCODE_CONFIGURATION=${CONFIGURATION}\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -333,7 +333,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/../libsudokurenderer/build/xcode-frameworks";
+				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/../libsudoku/build/xcode-frameworks";
 				INFOPLIST_FILE = "Sudoku Playground/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -352,7 +352,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/../libsudokurenderer/build/xcode-frameworks";
+				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/../libsudoku/build/xcode-frameworks";
 				INFOPLIST_FILE = "Sudoku Playground/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

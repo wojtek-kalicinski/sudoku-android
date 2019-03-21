@@ -16,7 +16,7 @@
  */
 
 import UIKit
-import libsudokurenderer
+import libsudoku
 
 class CellView: UIView {
     
@@ -78,8 +78,6 @@ class CellView: UIView {
     
     override func draw(_ rect: CGRect) {
         canvas.grabContext()
-//        UIGraphicsGetCurrentContext()?.setFillColor(UIColor.white.cgColor)
-//        UIGraphicsGetCurrentContext()?.fill(bounds)
         SudokuRendererKt.drawCell(multiCanvas: canvas, numbersShowing: numbersShowing, width: Float(bounds.width), height: Float(bounds.height), isFocused: isFocused, isChangeable: isChangeable, isNumberIncorrect: isNumberIncorrect, isNumberConfirmed: isNumberConfirmed, colorFocused: Int32(bitPattern: 0xFFe6e6e6), colorChangeable: Int32(bitPattern: 0xFF777777), colorIncorrect: Int32(bitPattern: 0xFFbb0000), colorHighlight: Int32(bitPattern: 0xFFFFECB3), bigNumberHeight: Float(bigNumberHeight), smallNumberHeight: Float(smallNumberHeight))
     }
 

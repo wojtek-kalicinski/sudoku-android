@@ -23,7 +23,8 @@ import me.kalicinski.sudoku.engine.SudokuBoard.Companion.BOARD_SIZE
 @Serializable
 class IntBoard() : SudokuBoard {
 
-    val grid = MutableList<Int>(BOARD_SIZE) { 0 }
+    //this used to be an IntArray, but we need a list for kotlinx.serialization
+    val grid = MutableList(BOARD_SIZE) { 0 }
 
     constructor(initGrid: IntArray) : this(){
         initGrid.forEachIndexed { index, i ->

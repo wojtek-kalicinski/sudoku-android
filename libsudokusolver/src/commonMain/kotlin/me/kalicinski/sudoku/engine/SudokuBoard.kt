@@ -19,7 +19,7 @@ package me.kalicinski.sudoku.engine
 
 interface SudokuBoard {
 
-    open fun toArray(): IntArray {
+    fun toArray(): IntArray {
         val board = IntArray(BOARD_SIZE)
         for (i in 0 until BOARD_SIZE) {
             if (possibleValuesNum(i) > 1) {
@@ -36,39 +36,39 @@ interface SudokuBoard {
      * @param pos cell index
      * @return true if value is not a draft
      */
-    abstract fun isCommitedValue(pos: Int): Boolean
+    fun isCommitedValue(pos: Int): Boolean
 
-    abstract fun setCommitedValue(pos: Int, commited: Boolean)
+    fun setCommitedValue(pos: Int, commited: Boolean)
 
     /**
      * Returns true if the value in this cell is part of the sudoku board and can't be changed
      * @param pos cell index
      * @return true if value is a starting value of the sudoku board
      */
-    abstract fun isStartingValue(pos: Int): Boolean
+    fun isStartingValue(pos: Int): Boolean
 
-    abstract fun setStartingValue(pos: Int, starting: Boolean)
+    fun setStartingValue(pos: Int, starting: Boolean)
 
     /**
      * Checks if there are any numbers currently in this cell
      * @param pos cell index
      * @return true if the cell holds at least one value
      */
-    abstract fun hasPossibleValue(pos: Int): Boolean
+    fun hasPossibleValue(pos: Int): Boolean
 
     /**
      * Checks how many numbers are currently in this cell
      * @param pos cell index
      * @return the number of currently held values
      */
-    abstract fun possibleValuesNum(pos: Int): Int
+    fun possibleValuesNum(pos: Int): Int
 
     /**
      * Returns a list of current numbers in this cell
      * @param pos cell index
      * @return List containing all numbers in this cell
      */
-    abstract fun possibleValues(pos: Int): List<Int>
+    fun possibleValues(pos: Int): List<Int>
 
     /**
      * Sets a single number in a cell, either as draft or not.
@@ -78,7 +78,7 @@ interface SudokuBoard {
      * @param value number 1-9
      * @param commited true if the number is not a draft
      */
-    abstract fun setValue(pos: Int, value: Int, commited: Boolean)
+    fun setValue(pos: Int, value: Int, commited: Boolean)
 
     /**
      * Unsets a number in a cell if it was set.
@@ -86,7 +86,7 @@ interface SudokuBoard {
      * @param value number 1-9
      * @return true if the operation changed the board, false if it was no-op
      */
-    abstract fun removePossibleValue(pos: Int, value: Int): Boolean
+    fun removePossibleValue(pos: Int, value: Int): Boolean
 
     /**
      * Sets a number in a cell if it was not set
@@ -94,7 +94,7 @@ interface SudokuBoard {
      * @param value number 1-9
      * @return true if the operation changed the board, false if it was no-op
      */
-    abstract fun addPossibleValue(pos: Int, value: Int): Boolean
+    fun addPossibleValue(pos: Int, value: Int): Boolean
 
     /**
      * Checks if the given number is currently set
@@ -102,26 +102,26 @@ interface SudokuBoard {
      * @param value number 1-9 to check
      * @return true if the cell currently has the number set
      */
-    abstract fun isValuePossible(pos: Int, value: Int): Boolean
+    fun isValuePossible(pos: Int, value: Int): Boolean
 
     /**
      * Gets the first number that is set in this cell, if any
      * @param pos cell index
      * @return first number that is set, counting from 1-9
      */
-    abstract fun getFirstPossibleValue(pos: Int): Int
+    fun getFirstPossibleValue(pos: Int): Int
 
     /**
      * Clears any values and state on the given cell
      * @param pos cell index
      */
-    abstract fun clearValues(pos: Int)
+    fun clearValues(pos: Int)
 
     /**
      * Returns an deep copy of this board.
      * @return copy of this board
      */
-    abstract fun copy(): SudokuBoard
+    fun copy(): SudokuBoard
 
     companion object {
         const val BOARD_SIZE = 9 * 9

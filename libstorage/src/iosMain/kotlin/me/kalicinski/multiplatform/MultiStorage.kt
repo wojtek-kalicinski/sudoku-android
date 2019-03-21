@@ -19,11 +19,7 @@ package me.kalicinski.multiplatform
 import platform.Foundation.NSUserDefaults
 
 actual class MultiStorage actual constructor() {
-    private val defaults: NSUserDefaults
-
-    init {
-        defaults = NSUserDefaults.standardUserDefaults()
-    }
+    private val defaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
 
     actual fun getString(key: String): String? {
         return defaults.stringForKey(key)
