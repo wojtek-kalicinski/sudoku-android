@@ -18,7 +18,6 @@ package me.kalicinski.sudoku.renderer
 
 import me.kalicinski.multiplatform.MultiCanvas
 import me.kalicinski.multiplatform.Rect
-import kotlin.math.abs
 
 fun drawBoard(
         multiCanvas: MultiCanvas,
