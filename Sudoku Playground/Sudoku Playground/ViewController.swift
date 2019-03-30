@@ -26,11 +26,13 @@ class ViewController: UIViewController {
     }
     
     @IBAction func generateClicked(_ sender: UIButton) {
-        game = getBoard(regen: true, seed: Int64(seed))
-        seed = seed + 1
-        let board = game!.board
-        boardView.setBoard(board: board)
-        localBoardSource.game = game
+        boardRepository.getBoard(regen: true, seed: Int64(seed), callback: {[weak self] newGame in
+            guard let self = self else { return KotlinUnit() }
+            self.game = newGame
+            self.boardView.setBoard(board: self.game!.board)
+            return KotlinUnit()
+        })
+        seed += 1
     }
     
     @IBOutlet weak var boardView: BoardView!
@@ -38,6 +40,8 @@ class ViewController: UIViewController {
     let localBoardSource = LocalBoardSource(storage: MultiStorage())
     let generateBoardSource = GenerateBoardSource()
     var game: SudokuGame? = nil
+    let boardRepository = BoardRepository(localSource: LocalBoardSource(storage: MultiStorage()), generator: GenerateBoardSource())
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()

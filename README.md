@@ -2,11 +2,14 @@
 
 **This is not an official Google product**
 
-Sudoku Playground is a **work-in-progress** sudoku game app for Android and Web (JS).
+Sudoku Playground is a **work-in-progress** sudoku game app for Android, Web (JS) and iOS.
 
 It's a hobby project to learn about Android APIs, libraries and best practices. It contains a
 functional sudoku board generator and solver, as well as UI so that you can actually play a
 sudoku board from start to finish. 
+
+This project is also an exploration of business logic code sharing between platforms 
+using Kotlin Multiplatform.
 
 At the same time, this app is not meant to showcase the best-in-class sudoku algorithms - 
 the ones implemented are _good enough_ for this sample.
@@ -15,9 +18,9 @@ the ones implemented are _good enough_ for this sample.
 
 Some tech you can find inside:
 
- * Entirely written in [Kotlin](https://kotlinlang.org/)
- * The sudoku generator/solver is a pure Kotlin common module, included from the Android
-   and JavaScript frontends
+ * Entirely written in [Kotlin](https://kotlinlang.org/) (+ some Swift for iOS UI)
+ * The sudoku generator/solver is a pure Kotlin common module, included from the Android,
+ iOS and JavaScript frontends
  * Uses [Architecture Components](https://developer.android.com/topic/libraries/architecture/):
  ViewModels and LiveData
  * Uses [Data Binding](https://developer.android.com/topic/libraries/data-binding/index.html) to
@@ -32,8 +35,6 @@ Some tech you can find inside:
  * Sudoku boards are generated using a deterministic algorithm shared between frontends, i.e.
  given a pseudo-random number generator (PRNG) initialized with the same seed, 
  you will always get the same board
- * The project contains a seeded PRNG written in Kotlin common (since Kotlin doesn't provide a 
- built-in PRNG for Kotlin/JS in the standard library)
  * Android app supports sharing and opening deep links containing a seed number 
  used to initialize the board (e.g. https://sudokuplayground.firebaseapp.com/sudoku/1234)
  * The website counterpart to the Android app is hosted under the same URLs and will show the 
