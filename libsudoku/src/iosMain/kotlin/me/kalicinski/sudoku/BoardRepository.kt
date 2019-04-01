@@ -19,19 +19,16 @@ package me.kalicinski.sudoku
 
 import kotlinx.cinterop.convert
 import kotlinx.cinterop.staticCFunction
-import kotlinx.serialization.json.Json
 import me.kalicinski.sudoku.datasource.GenerateBoardSource
 import me.kalicinski.sudoku.datasource.LocalBoardSource
-import me.kalicinski.sudoku.engine.IntBoard
-import me.kalicinski.sudoku.engine.SudokuBoard
 import me.kalicinski.sudoku.engine.SudokuGame
-import platform.darwin.dispatch_async
 import platform.darwin.dispatch_async_f
 import platform.darwin.dispatch_get_global_queue
-import platform.darwin.dispatch_get_main_queue
 import platform.posix.QOS_CLASS_USER_INITIATED
-import kotlinx.cinterop.signExtend
-import kotlin.native.concurrent.*
+import kotlin.native.concurrent.DetachedObjectGraph
+import kotlin.native.concurrent.attach
+import kotlin.native.concurrent.ensureNeverFrozen
+import kotlin.native.concurrent.freeze
 
 class BoardRepository constructor(
         val localSource: LocalBoardSource,
@@ -50,27 +47,6 @@ class BoardRepository constructor(
         localSource.freeze()
         generator.freeze()
         this.ensureNeverFrozen()
-    }
-
-    fun <T> runAsyncThenMain(asyncJob: () -> T, mainJob: (T) -> Unit) {
-        asyncJob.freeze()
-        mainJob.freeze()
-        dispatch_async_f(
-                dispatch_get_global_queue(QOS_CLASS_USER_INITIATED.convert(), 0),
-                DetachedObjectGraph { Pair(asyncJob, mainJob) }.asCPointer(),
-                staticCFunction { ptr ->
-                    initRuntimeIfNeeded()
-                    val jobs = DetachedObjectGraph<Pair<() -> T, (T) -> Unit>>(ptr).attach()
-                    val t = DetachedObjectGraph { Pair(jobs.first(), jobs.second) }.asCPointer()
-                    dispatch_async_f(
-                            dispatch_get_main_queue(),
-                            t,
-                            staticCFunction { ptr2 ->
-                                val pair = DetachedObjectGraph<Pair<T, (T) -> Unit>>(ptr2).attach()
-                                pair.second(pair.first)
-                            }
-                    )
-                });
     }
 
     fun getBoard(regen: Boolean, seed: Long, callback: ((SudokuGame) -> Unit)): Unit {
