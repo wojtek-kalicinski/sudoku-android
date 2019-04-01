@@ -26,8 +26,8 @@ kotlin {
     sourceSets {
         jsMain {
             dependencies {
-                implementation project(":libsudokurenderer")
                 implementation project(":libsudoku")
+                implementation project(":libsudokusolver")
                 implementation project(":libcanvas")
                 implementation "org.jetbrains.kotlinx:kotlinx-html-js:0.6.8"
                 implementation 'org.jetbrains.kotlin:kotlin-stdlib-js'

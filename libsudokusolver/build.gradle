@@ -1,0 +1,55 @@
+plugins {
+    id 'org.jetbrains.kotlin.multiplatform'
+}
+apply plugin: 'kotlinx-serialization'
+
+
+kotlin {
+    targets {
+        fromPreset(presets.jvm, 'jvm')
+        fromPreset(presets.js, 'js')
+
+        fromPreset(determineIosPreset(), 'ios')
+    }
+
+    sourceSets {
+        commonMain {
+            dependencies {
+                api "org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.10.0"
+                implementation "org.jetbrains.kotlin:kotlin-stdlib-common:${versions.kotlin}"
+            }
+        }
+        commonTest {
+            dependencies {
+                implementation "org.jetbrains.kotlin:kotlin-test-common:${versions.kotlin}"
+                implementation "org.jetbrains.kotlin:kotlin-test-annotations-common:${versions.kotlin}"
+            }
+        }
+
+        jvmTest {
+            dependencies {
+                implementation "org.jetbrains.kotlin:kotlin-test:${versions.kotlin}"
+                implementation "org.jetbrains.kotlin:kotlin-test-junit:${versions.kotlin}"
+            }
+        }
+        iosMain {
+            dependencies {
+                api "org.jetbrains.kotlinx:kotlinx-serialization-runtime-native:0.10.0"
+            }
+        }
+    }
+}
+
+
+configurations {
+    compileClasspath
+}
+
+// If custom preset specified in 'sudoku.preset.name' property, then use it for building.
+// Otherwise build for iPhone simulator (by default).
+def determineIosPreset() {
+    String presetName = project.hasProperty('sudoku.preset.name') ? project.properties['sudoku.preset.name'] : 'iosX64'
+    def preset = project.kotlin.presets[presetName]
+    println("$project has been configured for $presetName platform.")
+    preset
+}

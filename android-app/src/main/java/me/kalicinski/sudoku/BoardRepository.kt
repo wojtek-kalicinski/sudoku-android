@@ -17,13 +17,11 @@
 
 package me.kalicinski.sudoku
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import me.kalicinski.sudoku.datasource.GenerateBoardSource
 import me.kalicinski.sudoku.datasource.LocalBoardSource
-import me.kalicinski.sudoku.engine.SudokuBoard
 import me.kalicinski.sudoku.engine.SudokuGame
-import java.util.concurrent.Executors
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -32,28 +30,19 @@ class BoardRepository @Inject constructor(
         val localSource: LocalBoardSource,
         val generator: GenerateBoardSource
 ) {
-    private val executor = Executors.newSingleThreadExecutor()
-
-    fun getBoard(regen: Boolean, seed: Long): LiveData<SudokuGame> {
-        val liveData = MutableLiveData<SudokuGame>()
-        executor.execute {
-            var game: SudokuGame? = null
-            if (!regen) {
-                game = localSource.game
-            }
-
-            if (game == null) {
-                game = generator.generateBoard(seed)
-            }
-            liveData.postValue(game)
+    suspend fun getBoard(regen: Boolean, seed: Long): SudokuGame = withContext(Dispatchers.Default) {
+        var game: SudokuGame? = null
+        if (!regen) {
+            game = localSource.game
         }
-        return liveData
+
+        if (game == null) {
+            game = generator.generateBoard(seed)
+        }
+        game as SudokuGame
     }
 
-    fun saveBoard(game: SudokuGame?) {
-        executor.execute {
-            localSource.game = game
-        }
+    suspend fun saveBoard(game: SudokuGame?) = withContext(Dispatchers.Default) {
+        localSource.game = game
     }
-
 }

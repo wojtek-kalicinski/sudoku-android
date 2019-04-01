@@ -123,19 +123,20 @@ android {
 
 
 dependencies {
-    implementation project(":libsudoku")
-    implementation project(":libcanvas")
-    implementation project(":libsudokurenderer")
+    implementation project(':libsudoku')
 
-    api "androidx.appcompat:appcompat:${versions.supportLibrary}"
-    api "androidx.constraintlayout:constraintlayout:${versions.constraintLayout}"
-    api "androidx.annotation:annotation:${versions.supportAnnotations}"
+    implementation "androidx.appcompat:appcompat:${versions.supportLibrary}"
+    implementation "androidx.constraintlayout:constraintlayout:${versions.constraintLayout}"
+    implementation "androidx.annotation:annotation:${versions.supportAnnotations}"
     implementation "com.google.android.instantapps:instantapps:${versions.instantApps}"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:${versions.coroutines}"
 
-    implementation "android.arch.navigation:navigation-fragment-ktx:${versions.navigation}"
-    implementation "android.arch.navigation:navigation-ui-ktx:${versions.navigation}"
 
-    api "androidx.lifecycle:lifecycle-extensions:${versions.lifecycles}"
+    implementation "androidx.navigation:navigation-fragment:${versions.navigation}"
+    implementation "androidx.navigation:navigation-ui:${versions.navigation}"
+
+    implementation "androidx.lifecycle:lifecycle-extensions:${versions.lifecycles}"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:${versions.lifecycles}"
 
     implementation "androidx.core:core-ktx:${versions.coreKtx}"
 
@@ -143,8 +144,8 @@ dependencies {
 
     implementation "com.google.code.gson:gson:${versions.gson}"
 
-    api "com.google.dagger:dagger:${versions.dagger}"
-    api "com.google.dagger:dagger-android-support:${versions.dagger}"
+    implementation "com.google.dagger:dagger:${versions.dagger}"
+    implementation "com.google.dagger:dagger-android-support:${versions.dagger}"
     kapt "com.google.dagger:dagger-compiler:${versions.dagger}"
     kapt "com.google.dagger:dagger-android-processor:${versions.dagger}"
 

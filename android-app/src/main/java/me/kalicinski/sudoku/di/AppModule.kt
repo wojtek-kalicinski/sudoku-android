@@ -18,9 +18,14 @@
 package me.kalicinski.sudoku.di
 
 import android.content.Context
+import android.preference.PreferenceManager
 import dagger.Module
 import dagger.Provides
+import me.kalicinski.multiplatform.MultiStorage
 import me.kalicinski.sudoku.SudokuApplication
+import me.kalicinski.sudoku.datasource.GenerateBoardSource
+import me.kalicinski.sudoku.datasource.LocalBoardSource
+import javax.inject.Singleton
 
 @Module
 abstract class AppModule {
@@ -31,5 +36,28 @@ abstract class AppModule {
         internal fun providesContext(application: SudokuApplication): Context {
             return application.applicationContext
         }
+
+        @Provides
+        @JvmStatic
+        @Singleton
+        internal fun providesStorage(context: Context): MultiStorage{
+            return MultiStorage(PreferenceManager.getDefaultSharedPreferences(context.applicationContext))
+        }
+
+        @Provides
+        @JvmStatic
+        @Singleton
+        internal fun providesGeneratedBoardSource(): GenerateBoardSource {
+            return GenerateBoardSource()
+        }
+
+        @Provides
+        @JvmStatic
+        @Singleton
+        internal fun providesLocalBoardSource(storage: MultiStorage): LocalBoardSource {
+            return LocalBoardSource(storage)
+        }
+
+
     }
 }

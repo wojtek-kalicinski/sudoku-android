@@ -23,6 +23,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import android.os.Handler
 import android.os.Message
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
+import me.kalicinski.sudoku.engine.IntBoard
 import me.kalicinski.sudoku.engine.SudokuBoard
 import me.kalicinski.sudoku.engine.SudokuGame
 import javax.inject.Inject
@@ -42,9 +45,9 @@ class BoardViewModel @Inject constructor(val repository: BoardRepository) : View
     object : Handler() {
         override fun handleMessage(msg: Message) {
             if (msg.what == MSG_SAVE) {
-                repository.saveBoard(msg.obj as SudokuGame)
-            } else {
-                super.handleMessage(msg)
+                viewModelScope.launch {
+                    repository.saveBoard(msg.obj as SudokuGame)
+                }
             }
         }
     }
@@ -52,10 +55,10 @@ class BoardViewModel @Inject constructor(val repository: BoardRepository) : View
     init {
         board.observeForever {
             if (it != null) {
-                game?.board = it
+                game?.board = it as IntBoard
                 handler.removeMessages(MSG_SAVE)
                 val msg = handler.obtainMessage(MSG_SAVE, game)
-                handler.sendMessageDelayed(msg, (1000 * 10).toLong())
+                handler.sendMessageDelayed(msg, 5_000L)
             }
         }
     }
@@ -63,8 +66,10 @@ class BoardViewModel @Inject constructor(val repository: BoardRepository) : View
     fun saveNow() {
         board.value?.let {
             handler.removeMessages(MSG_SAVE)
-            game?.board = it
-            repository.saveBoard(game)
+            game?.board = it as IntBoard
+            viewModelScope.launch {
+                repository.saveBoard(game)
+            }
         }
     }
 
@@ -77,18 +82,13 @@ class BoardViewModel @Inject constructor(val repository: BoardRepository) : View
     @JvmOverloads
     fun generateNewBoard(regen: Boolean, seed: Long = System.currentTimeMillis()) {
         busy.value = true
-        val newBoards = repository.getBoard(regen, seed)
-        newBoards.observeForever(object : Observer<SudokuGame> {
-            override fun onChanged(b: SudokuGame?) {
-                b?.let {
-                    game = it
-                    board.value = it.board
-                }
-                mistakes.value = null
-                busy.value = false
-                newBoards.removeObserver(this)
-            }
-        })
+        viewModelScope.launch {
+            val newGame = repository.getBoard(regen, seed)
+            game = newGame
+            board.value = newGame.board
+            mistakes.value = null
+            busy.value = false
+        }
     }
 
     fun solveBoard() {
