@@ -53,7 +53,6 @@ class BoardRepository constructor(
         val localSource = this.localSource
         val generator = this.generator
         runAsyncThenMain({
-            println("async")
             var game: SudokuGame? = null
             if (!regen) {
                 game = localSource.game
@@ -62,51 +61,19 @@ class BoardRepository constructor(
             if (game == null) {
                 game = generator.generateBoard(seed)
             }
+            game.ensureNeverFrozen()
+            game.board.ensureNeverFrozen()
             game as SudokuGame
-        }, {
-            println("main")
-            callback(it)
-        })
+        }, callback)
     }
 
-//    fun getBoard(regen: Boolean, seed: Long, callback: ((SudokuGame) -> Unit)): Unit {
-//        dispatch_async_f(
-//                dispatch_get_global_queue(QOS_CLASS_USER_INITIATED.convert(), 0),
-//                DetachedObjectGraph { GenerateArgs(regen, seed, localSource, generator, callback) }.asCPointer(),
-//                staticCFunction { argsPtr ->
-//                    initRuntimeIfNeeded()
-//                    val args = DetachedObjectGraph<GenerateArgs>(argsPtr).attach()
-//                    val pointer = DetachedObjectGraph {
-//                        var game: SudokuGame? = null
-//                        if (!args.regen) {
-//                            game = args.localSource.game
-//                        }
-//
-//                        if (game == null) {
-//                            game = args.generator.generateBoard(args.seed)
-//                        }
-//                        Pair(game, args.callback) }.asCPointer()
-//                    dispatch_async_f(
-//                            dispatch_get_main_queue(),
-//                            pointer,
-//                            staticCFunction { pairPtr ->
-//                                val pair = DetachedObjectGraph<Pair<SudokuGame, (SudokuGame) -> Unit>>(pairPtr).attach()
-//                                pair.second(pair.first)
-//                            }
-//                    )
-//                }
-//        )
-//    }
-
     fun saveBoard(game: SudokuGame?) {
-        dispatch_async_f(
-                dispatch_get_global_queue(QOS_CLASS_USER_INITIATED.convert(), 0),
-                DetachedObjectGraph { Pair(localSource, game) }.asCPointer(),
-                staticCFunction { it ->
-                    initRuntimeIfNeeded()
-                    val args = DetachedObjectGraph<Pair<LocalBoardSource, SudokuGame>>(it).attach()
-                    args.first.game = args.second
-                }
-        )
+        val localSource = this.localSource
+        val gameCopy = game?.copy(board = game.board.copy())
+        runAsyncThenMain({
+            localSource.game = gameCopy
+        }, {
+            println("saved")
+        })
     }
 }

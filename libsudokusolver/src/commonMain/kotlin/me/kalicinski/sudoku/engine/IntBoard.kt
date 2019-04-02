@@ -26,7 +26,7 @@ class IntBoard() : SudokuBoard {
     //this used to be an IntArray, but we need a list for kotlinx.serialization
     val grid = MutableList(BOARD_SIZE) { 0 }
 
-    constructor(initGrid: IntArray) : this(){
+    constructor(initGrid: IntArray) : this() {
         initGrid.forEachIndexed { index, i ->
             grid[index] = i
         }

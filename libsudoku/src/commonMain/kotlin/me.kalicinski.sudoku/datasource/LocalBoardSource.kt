@@ -24,11 +24,13 @@ private const val PREF_BOARD = "PREF_BOARD"
 
 class LocalBoardSource constructor(val storage: MultiStorage) {
 
+    val serializer = SudokuGame.serializer()
+
     var game: SudokuGame?
         get() {
             return storage.getString(PREF_BOARD)?.let {
                 println("read from storage: $it")
-                val loadedBoard = Json.parse(SudokuGame.serializer(), it)
+                val loadedBoard = Json.parse(serializer, it)
                 loadedBoard.calculateSolution()
                 return loadedBoard
             }
@@ -36,9 +38,10 @@ class LocalBoardSource constructor(val storage: MultiStorage) {
         set(value) {
             storage.run {
                 if (value != null) {
+                    println("saving $value")
                     putString(
                             PREF_BOARD,
-                            Json.stringify(SudokuGame.serializer(), value)
+                            Json.stringify(serializer, value)
                     )
                 } else {
                     putString(PREF_BOARD, null)

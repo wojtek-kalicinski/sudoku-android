@@ -45,8 +45,9 @@ class BoardViewModel @Inject constructor(val repository: BoardRepository) : View
     object : Handler() {
         override fun handleMessage(msg: Message) {
             if (msg.what == MSG_SAVE) {
+                val obj = msg.obj
                 viewModelScope.launch {
-                    repository.saveBoard(msg.obj as SudokuGame)
+                    repository.saveBoard(obj as SudokuGame)
                 }
             }
         }
@@ -58,7 +59,7 @@ class BoardViewModel @Inject constructor(val repository: BoardRepository) : View
                 game?.board = it as IntBoard
                 handler.removeMessages(MSG_SAVE)
                 val msg = handler.obtainMessage(MSG_SAVE, game)
-                handler.sendMessageDelayed(msg, 5_000L)
+                handler.sendMessageDelayed(msg, 2_000L)
             }
         }
     }

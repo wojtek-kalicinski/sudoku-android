@@ -31,6 +31,7 @@ class ViewController: UIViewController {
             guard let self = self else { return KotlinUnit() }
             self.game = newGame
             self.boardView.setBoard(board: self.game!.board)
+            self.boardRepository.saveBoard(game: newGame)
             return KotlinUnit()
         })
     }

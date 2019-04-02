@@ -17,11 +17,15 @@
 
 package me.kalicinski.sudoku.engine
 
-import kotlinx.serialization.Serializable
+import kotlinx.serialization.*
 
 @Serializable
-data class SudokuGame(var board: IntBoard, val seed: Long) {
+data class SudokuGame(
+        var board: IntBoard,
+        val seed: Long
+) {
 
+    @Transient
     lateinit var solvedBoard: IntBoard
 
     fun calculateSolution() {
