@@ -12,5 +12,3 @@
 -keepnames class me.kalicinski.sudoku.engine.SudokuGame {
     <fields>;
 }
-
--keep class android.support.v7.app.AppCompatViewInflater

@@ -72,18 +72,6 @@ android {
         enabled true
     }
 
-    // Specifies one flavor dimension.
-    flavorDimensions "instant"
-    productFlavors {
-        instant {
-            dimension "instant"
-        }
-        installed {
-            dimension "instant"
-            versionCode buildConfig.version + 1
-        }
-    }
-
     buildTypes {
         debugMini {
             initWith debug
