@@ -20,9 +20,33 @@ package me.kalicinski.sudoku
 import dagger.android.AndroidInjector
 import dagger.android.DaggerApplication
 import me.kalicinski.sudoku.di.DaggerAppComponent
+import android.os.StrictMode.VmPolicy
+import android.os.StrictMode
+
+
 
 
 class SudokuApplication : DaggerApplication() {
+
+    init {
+        System.setProperty("kotlinx.coroutines.fast.service.loader", "false")
+        if (BuildConfig.DEBUG) {
+            StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder()
+                    .detectDiskReads()
+                    .detectDiskWrites()
+                    .detectAll()   // or .detectAll() for all detectable problems
+                    .penaltyDeath()
+                    .build())
+            StrictMode.setVmPolicy(VmPolicy.Builder()
+                    .detectLeakedSqlLiteObjects()
+                    .detectLeakedClosableObjects()
+                    .penaltyLog()
+                    .penaltyDeath()
+                    .build())
+        }
+        super.onCreate()
+    }
+
     override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
         return DaggerAppComponent.builder().create(this)
     }

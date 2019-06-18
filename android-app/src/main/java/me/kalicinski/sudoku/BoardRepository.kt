@@ -17,6 +17,7 @@
 
 package me.kalicinski.sudoku
 
+import dagger.Lazy
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import me.kalicinski.sudoku.datasource.GenerateBoardSource
@@ -27,22 +28,18 @@ import javax.inject.Singleton
 
 @Singleton
 class BoardRepository @Inject constructor(
-        val localSource: LocalBoardSource,
-        val generator: GenerateBoardSource
+        private val localSource: Lazy<LocalBoardSource>,
+        private val generator: GenerateBoardSource
 ) {
     suspend fun getBoard(regen: Boolean, seed: Long): SudokuGame = withContext(Dispatchers.Default) {
-        var game: SudokuGame? = null
         if (!regen) {
-            game = localSource.game
+            localSource.get().game?.let { return@withContext it }
         }
 
-        if (game == null) {
-            game = generator.generateBoard(seed)
-        }
-        game as SudokuGame
+        generator.generateBoard(seed)
     }
 
-    suspend fun saveBoard(game: SudokuGame?) = withContext(Dispatchers.Default) {
-        localSource.game = game
+    suspend fun saveBoard(game: SudokuGame?) = withContext(Dispatchers.IO) {
+        localSource.get().game = game
     }
 }

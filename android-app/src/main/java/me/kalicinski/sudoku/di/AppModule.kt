@@ -40,7 +40,7 @@ abstract class AppModule {
         @Provides
         @JvmStatic
         @Singleton
-        internal fun providesStorage(context: Context): MultiStorage{
+        internal fun providesStorage(context: Context): MultiStorage {
             return MultiStorage(PreferenceManager.getDefaultSharedPreferences(context.applicationContext))
         }
 

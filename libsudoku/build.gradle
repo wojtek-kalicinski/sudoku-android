@@ -6,7 +6,6 @@ apply plugin: 'kotlinx-serialization'
 
 android {
     compileSdkVersion buildConfig.compileSdk
-    buildToolsVersion versions.buildTools
 
     defaultConfig {
         minSdkVersion buildConfig.minSdk

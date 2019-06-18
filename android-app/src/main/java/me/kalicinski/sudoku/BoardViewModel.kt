@@ -17,13 +17,12 @@
 
 package me.kalicinski.sudoku
 
-import android.annotation.SuppressLint
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
-import android.os.Handler
-import android.os.Message
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import me.kalicinski.sudoku.engine.IntBoard
 import me.kalicinski.sudoku.engine.SudokuBoard
@@ -36,39 +35,30 @@ class BoardViewModel @Inject constructor(val repository: BoardRepository) : View
     val board = MutableLiveData<SudokuBoard>()
     val busy = MutableLiveData<Boolean>()
     val mistakes = MutableLiveData<BooleanArray>()
+    var saveJob: Job? = null
 
     companion object {
         const val MSG_SAVE = 1
-    }
-
-    private val handler = @SuppressLint("HandlerLeak")
-    object : Handler() {
-        override fun handleMessage(msg: Message) {
-            if (msg.what == MSG_SAVE) {
-                val obj = msg.obj
-                viewModelScope.launch {
-                    repository.saveBoard(obj as SudokuGame)
-                }
-            }
-        }
     }
 
     init {
         board.observeForever {
             if (it != null) {
                 game?.board = it as IntBoard
-                handler.removeMessages(MSG_SAVE)
-                val msg = handler.obtainMessage(MSG_SAVE, game)
-                handler.sendMessageDelayed(msg, 2_000L)
+                saveJob?.cancel()
+                saveJob = GlobalScope.launch {
+                    delay(2_000L)
+                    repository.saveBoard(game)
+                }
             }
         }
     }
 
     fun saveNow() {
         board.value?.let {
-            handler.removeMessages(MSG_SAVE)
+            saveJob?.cancel()
             game?.board = it as IntBoard
-            viewModelScope.launch {
+            GlobalScope.launch {
                 repository.saveBoard(game)
             }
         }

@@ -16,23 +16,29 @@
  */
 package me.kalicinski.sudoku.datasource
 
+import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import me.kalicinski.multiplatform.MultiStorage
 import me.kalicinski.sudoku.engine.SudokuGame
 
 private const val PREF_BOARD = "PREF_BOARD"
 
-class LocalBoardSource constructor(val storage: MultiStorage) {
+class LocalBoardSource constructor(private val storage: MultiStorage) {
 
-    val serializer = SudokuGame.serializer()
+    private val serializer = SudokuGame.serializer()
 
     var game: SudokuGame?
         get() {
             return storage.getString(PREF_BOARD)?.let {
                 println("read from storage: $it")
-                val loadedBoard = Json.parse(serializer, it)
-                loadedBoard.calculateSolution()
-                return loadedBoard
+                try {
+                    val loadedBoard = Json.parse(serializer, it)
+                    loadedBoard.calculateSolution()
+                    return loadedBoard
+                } catch (e: SerializationException) {
+                    // format changed or corrupt data, just return null
+                    return null
+                }
             }
         }
         set(value) {

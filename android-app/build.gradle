@@ -23,7 +23,7 @@ plugins {
 
 //apply plugin: 'com.google.gms.oss.licenses.plugin'
 apply plugin: "kotlin-kapt"
-apply plugin: "androidx.navigation.safeargs"
+apply plugin: "androidx.navigation.safeargs.kotlin"
 
 // Create a variable called keystorePropertiesFile, and initialize it to your
 // keystore.properties file, in the rootProject folder.
@@ -58,7 +58,6 @@ kotlin {
 
 android {
     compileSdkVersion buildConfig.compileSdk
-    buildToolsVersion versions.buildTools
 
     defaultConfig {
         versionCode buildConfig.version
@@ -76,28 +75,13 @@ android {
         debugMini {
             initWith debug
             minifyEnabled true
-//            shrinkResources true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), "proguard.pro"
-            matchingFallbacks = ['debug']
-        }
-
-        debugMiniOptim {
-            initWith debugMini
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), "proguard.pro"
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), "proguard.pro", "proguard-debug.pro"
             matchingFallbacks = ['debug']
         }
 
         release {
-            signingConfig signingConfigs.release
             minifyEnabled true
-//            shrinkResources true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), "proguard.pro"
-        }
-
-        releaseOptim {
-            initWith release
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), "proguard.pro"
-            matchingFallbacks = ['release']
         }
     }
 
@@ -106,22 +90,21 @@ android {
     }
 //    dynamicFeatures = [":dynamic_feature"]
 
-
 }
 
 
 dependencies {
     implementation project(':libsudoku')
 
-    implementation "androidx.appcompat:appcompat:${versions.supportLibrary}"
+    implementation "androidx.appcompat:appcompat:${versions.appCompat}"
     implementation "androidx.constraintlayout:constraintlayout:${versions.constraintLayout}"
     implementation "androidx.annotation:annotation:${versions.supportAnnotations}"
     implementation "com.google.android.instantapps:instantapps:${versions.instantApps}"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:${versions.coroutines}"
 
 
-    implementation "androidx.navigation:navigation-fragment:${versions.navigation}"
-    implementation "androidx.navigation:navigation-ui:${versions.navigation}"
+    implementation "androidx.navigation:navigation-fragment-ktx:${versions.navigation}"
+    implementation "androidx.navigation:navigation-ui-ktx:${versions.navigation}"
 
     implementation "androidx.lifecycle:lifecycle-extensions:${versions.lifecycles}"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:${versions.lifecycles}"
@@ -129,8 +112,6 @@ dependencies {
     implementation "androidx.core:core-ktx:${versions.coreKtx}"
 
     implementation "com.google.android.gms:play-services-oss-licenses:${versions.playServices}"
-
-    implementation "com.google.code.gson:gson:${versions.gson}"
 
     implementation "com.google.dagger:dagger:${versions.dagger}"
     implementation "com.google.dagger:dagger-android-support:${versions.dagger}"

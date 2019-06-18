@@ -17,6 +17,7 @@
 package me.kalicinski.multiplatform
 
 import android.content.SharedPreferences
+import androidx.core.content.edit
 
 actual class MultiStorage actual constructor() {
 
@@ -31,6 +32,8 @@ actual class MultiStorage actual constructor() {
     }
 
     actual fun putString(key: String, value: String?) {
-        prefs.edit().putString(key, value).apply()
+        prefs.edit(true) {
+            putString(key, value)
+        }
     }
 }

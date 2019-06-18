@@ -5,7 +5,6 @@ plugins {
 
 android {
     compileSdkVersion buildConfig.compileSdk
-    buildToolsVersion versions.buildTools
 
     defaultConfig {
         minSdkVersion buildConfig.minSdk
@@ -15,6 +14,7 @@ android {
 
 dependencies {
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+    implementation "androidx.core:core-ktx:${versions.coreKtx}"
     testImplementation 'org.jetbrains.kotlin:kotlin-test'
     testImplementation 'org.jetbrains.kotlin:kotlin-test-junit'
 }

@@ -29,6 +29,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.navArgs
 import com.google.android.instantapps.InstantApps
 import dagger.android.support.AndroidSupportInjection
 import me.kalicinski.sudoku.databinding.FragmentMainBinding
@@ -39,6 +40,7 @@ class MainFragment : Fragment() {
 
     private lateinit var boardViewModel: BoardViewModel
     @Inject lateinit var viewModelFactory: SudokuViewModelFactory
+    val mainFragmentArgs: MainFragmentArgs by navArgs()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this);
@@ -46,18 +48,11 @@ class MainFragment : Fragment() {
         setHasOptionsMenu(true)
         boardViewModel = ViewModelProviders.of(this, viewModelFactory).get(BoardViewModel::class.java)
 
-        arguments?.let { args ->
-            if (args.get("seed") is String){ //workaround until navigation deep links support types
-                args.getString("seed")!!.toLongOrNull()
-            } else {
-                MainFragmentArgs.fromBundle(args)
-                        .seed.takeUnless { it == 0L }
-            }
-        }.also { seed ->
+        mainFragmentArgs.seed.takeUnless { it == 0L }.let { seed ->
             if (seed == null) {
                 boardViewModel.initIfEmpty()
             } else {
-                boardViewModel.generateNewBoard(true, seed.toLong())
+                boardViewModel.generateNewBoard(true, seed)
             }
         }
     }
