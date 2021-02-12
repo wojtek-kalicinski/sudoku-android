@@ -1,7 +1,7 @@
 plugins {
     id 'org.jetbrains.kotlin.multiplatform'
+    id 'org.jetbrains.kotlin.plugin.serialization'
 }
-apply plugin: 'kotlinx-serialization'
 
 
 kotlin {
@@ -15,7 +15,7 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                api "org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.10.0"
+                api 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0-RC'
                 implementation "org.jetbrains.kotlin:kotlin-stdlib-common:${versions.kotlin}"
             }
         }
@@ -30,11 +30,6 @@ kotlin {
             dependencies {
                 implementation "org.jetbrains.kotlin:kotlin-test:${versions.kotlin}"
                 implementation "org.jetbrains.kotlin:kotlin-test-junit:${versions.kotlin}"
-            }
-        }
-        iosMain {
-            dependencies {
-                api "org.jetbrains.kotlinx:kotlinx-serialization-runtime-native:0.10.0"
             }
         }
     }

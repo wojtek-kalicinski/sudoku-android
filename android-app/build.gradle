@@ -1,5 +1,3 @@
-import com.android.build.gradle.internal.variant.BaseVariantData
-
 /*
  * Copyright 2018 Google LLC
  *  
@@ -18,7 +16,7 @@ import com.android.build.gradle.internal.variant.BaseVariantData
  */
 plugins {
     id 'com.android.application'
-    id 'org.jetbrains.kotlin.multiplatform'
+    id 'org.jetbrains.kotlin.android'
 }
 
 //apply plugin: 'com.google.gms.oss.licenses.plugin'
@@ -49,11 +47,6 @@ if (keystorePropertiesFile.exists()) {
             keyPassword android.signingConfigs.debug.keyPassword
         }
     }
-}
-
-
-kotlin {
-    targets.fromPreset(presets.android, 'android')
 }
 
 android {
@@ -88,8 +81,10 @@ android {
     packagingOptions {
         exclude "META-INF/**.kotlin_module"
     }
-//    dynamicFeatures = [":dynamic_feature"]
 
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }
 
 
@@ -106,7 +101,6 @@ dependencies {
     implementation "androidx.navigation:navigation-fragment-ktx:${versions.navigation}"
     implementation "androidx.navigation:navigation-ui-ktx:${versions.navigation}"
 
-    implementation "androidx.lifecycle:lifecycle-extensions:${versions.lifecycles}"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:${versions.lifecycles}"
 
     implementation "androidx.core:core-ktx:${versions.coreKtx}"

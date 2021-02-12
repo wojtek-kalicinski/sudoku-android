@@ -29,22 +29,19 @@ import android.os.StrictMode
 class SudokuApplication : DaggerApplication() {
 
     init {
-        System.setProperty("kotlinx.coroutines.fast.service.loader", "false")
         if (BuildConfig.DEBUG) {
             StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder()
-                    .detectDiskReads()
-                    .detectDiskWrites()
-                    .detectAll()   // or .detectAll() for all detectable problems
-                    .penaltyDeath()
-                    .build())
+                .detectDiskReads()
+                .detectDiskWrites()
+                .detectAll()   // or .detectAll() for all detectable problems
+                .penaltyLog()
+                .build())
             StrictMode.setVmPolicy(VmPolicy.Builder()
-                    .detectLeakedSqlLiteObjects()
-                    .detectLeakedClosableObjects()
-                    .penaltyLog()
-                    .penaltyDeath()
-                    .build())
+                .detectLeakedSqlLiteObjects()
+                .detectLeakedClosableObjects()
+                .penaltyLog()
+                .build())
         }
-        super.onCreate()
     }
 
     override fun applicationInjector(): AndroidInjector<out DaggerApplication> {

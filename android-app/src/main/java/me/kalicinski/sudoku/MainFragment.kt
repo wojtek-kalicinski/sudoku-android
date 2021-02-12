@@ -16,7 +16,6 @@
  */
 package me.kalicinski.sudoku
 
-import androidx.lifecycle.ViewModelProviders
 import android.content.Intent
 import androidx.databinding.DataBindingUtil
 import android.os.Bundle
@@ -28,6 +27,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.navArgs
 import com.google.android.instantapps.InstantApps
@@ -46,7 +46,7 @@ class MainFragment : Fragment() {
         AndroidSupportInjection.inject(this);
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-        boardViewModel = ViewModelProviders.of(this, viewModelFactory).get(BoardViewModel::class.java)
+        boardViewModel = ViewModelProvider(this, viewModelFactory).get(BoardViewModel::class.java)
 
         mainFragmentArgs.seed.takeUnless { it == 0L }.let { seed ->
             if (seed == null) {

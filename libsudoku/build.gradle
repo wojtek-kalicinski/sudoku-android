@@ -19,6 +19,18 @@ dependencies {
     testImplementation "org.jetbrains.kotlin:kotlin-test-junit:${versions.kotlin}"
 }
 
+android {
+    configurations {
+        create("androidTestApi")
+        create("androidTestDebugApi")
+        create("androidTestReleaseApi")
+        create("testApi")
+        create("testDebugApi")
+        create("testReleaseApi")
+    }
+}
+
+
 kotlin {
     targets {
         fromPreset(presets.android, 'android')

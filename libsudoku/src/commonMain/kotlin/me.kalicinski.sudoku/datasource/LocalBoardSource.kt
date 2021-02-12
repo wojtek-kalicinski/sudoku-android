@@ -32,7 +32,7 @@ class LocalBoardSource constructor(private val storage: MultiStorage) {
             return storage.getString(PREF_BOARD)?.let {
                 println("read from storage: $it")
                 try {
-                    val loadedBoard = Json.parse(serializer, it)
+                    val loadedBoard = Json.decodeFromString(serializer, it)
                     loadedBoard.calculateSolution()
                     return loadedBoard
                 } catch (e: SerializationException) {
@@ -47,7 +47,7 @@ class LocalBoardSource constructor(private val storage: MultiStorage) {
                     println("saving $value")
                     putString(
                             PREF_BOARD,
-                            Json.stringify(serializer, value)
+                            Json.encodeToString(serializer, value)
                     )
                 } else {
                     putString(PREF_BOARD, null)
